@@ -495,6 +495,9 @@ button:hover{opacity:0.88;}
       <div class="auth-field"><label>Password</label><input type="password" id="login-password" placeholder="Password"></div>
       <button class="auth-btn" onclick="signIn()">Sign in</button>
       <div class="auth-err" id="login-err"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <button onclick="openResetModal()" style="background:none;border:none;color:#666;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Forgot password?</button>
+      </div>
     </div>
     <div id="register-form" style="display:none;">
       <div class="auth-field"><label>Your name</label><input type="text" id="reg-name" placeholder="e.g. Tom Harris"></div>
@@ -513,6 +516,25 @@ button:hover{opacity:0.88;}
       <div class="auth-err" id="reg-err"></div>
     </div>
     <div class="auth-info">St Ives RFC · Under 10s · 2026/27<br>Data stored securely in the EU 🔒</div>
+  </div>
+</div>
+
+<!-- PASSWORD RESET MODAL -->
+<div class="modal-overlay" id="reset-modal" style="z-index:99999;">
+  <div class="modal-box">
+    <div class="modal-title">Reset password</div>
+    <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.5;">Enter your email address and we'll send you a link to reset your password.</p>
+    <div class="fg">
+      <label>Email address</label>
+      <input type="email" id="reset-email" placeholder="your@email.com">
+    </div>
+    <div class="auth-err" id="reset-err" style="margin-bottom:8px;"></div>
+    <div style="display:flex;gap:7px;margin-top:8px;">
+      <button class="pbtn" onclick="closeResetModal()" style="flex:1;">Cancel</button>
+      <button class="pbtn prim" onclick="sendResetEmail()" style="flex:2;" id="reset-btn">
+        <i class="ti ti-mail" style="font-size:11px;vertical-align:-2px;"></i> Send reset link
+      </button>
+    </div>
   </div>
 </div>
 
@@ -4119,6 +4141,48 @@ notifStyle.textContent = `
   }
 `;
 document.head.appendChild(notifStyle);
+
+// ============================================================
+// PASSWORD RESET
+// ============================================================
+window.openResetModal = function() {
+  const loginEmail = document.getElementById('login-email');
+  const resetEmail = document.getElementById('reset-email');
+  if(loginEmail && resetEmail) resetEmail.value = loginEmail.value;
+  const err = document.getElementById('reset-err');
+  if(err) err.textContent = '';
+  document.getElementById('reset-modal').classList.add('open');
+  setTimeout(()=>{ const e=document.getElementById('reset-email'); if(e)e.focus(); }, 100);
+};
+
+window.closeResetModal = function() {
+  document.getElementById('reset-modal').classList.remove('open');
+};
+
+window.sendResetEmail = async function() {
+  const email = document.getElementById('reset-email').value.trim();
+  const err = document.getElementById('reset-err');
+  const btn = document.getElementById('reset-btn');
+  if(!email) { if(err) err.textContent = 'Please enter your email address.'; return; }
+  if(btn) { btn.disabled=true; btn.textContent='Sending...'; }
+  try {
+    await firebase.auth().sendPasswordResetEmail(email);
+    closeResetModal();
+    // Show success message on login screen
+    const loginErr = document.getElementById('login-err');
+    if(loginErr) {
+      loginErr.style.color = '#27ae60';
+      loginErr.textContent = '✅ Reset link sent! Check your email.';
+    }
+  } catch(e) {
+    if(err) {
+      if(e.code === 'auth/user-not-found') err.textContent = 'No account found with that email.';
+      else if(e.code === 'auth/invalid-email') err.textContent = 'Please enter a valid email address.';
+      else err.textContent = 'Something went wrong — please try again.';
+    }
+  }
+  if(btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-mail" style="font-size:11px;vertical-align:-2px;"></i> Send reset link'; }
+};
 
 // All functions are global — no window.x = x needed
 
