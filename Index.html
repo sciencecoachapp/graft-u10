@@ -103,6 +103,12 @@ button:hover{opacity:0.88;}
 .award-name{font-size:12px;font-weight:700;color:#111;flex:1;}
 .award-pts{font-size:12px;font-weight:900;color:var(--navy);}
 
+/* PLAYER MULTI-SELECT */
+.player-select-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;font-size:11px;font-weight:700;color:#666;transition:all 0.15s;}
+.player-select-pill.selected{background:var(--navy);border-color:var(--navy);color:#fff;}
+.player-select-pill .ps-av{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;flex-shrink:0;}
+.player-select-pill:not(.selected) .ps-av{background:var(--pale);color:var(--navy);}
+
 /* NOTIFICATIONS */
 .notif-banner{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--navy);color:white;border-radius:12px;padding:.875rem 1.25rem;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:340px;width:90%;}
 .notif-banner i{font-size:18px;flex-shrink:0;}
@@ -888,7 +894,16 @@ button:hover{opacity:0.88;}
     <div id="lb-award" class="lb-panel">
       <div class="award-section">
         <div style="font-size:12px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">Award Hake Points <button class="manage-reasons-btn" onclick="openReasonsModal()"><i class="ti ti-pencil" style="font-size:10px;vertical-align:-1px;"></i> Manage reasons</button></div>
-        <select style="width:100%;margin-bottom:8px;" id="award-player"><option value="">Select a player…</option></select>
+
+        <!-- PLAYER MULTI-SELECT -->
+        <div style="font-size:11px;font-weight:800;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">Select players</div>
+        <div id="award-player-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+          <button onclick="selectAllPlayers()" style="flex:1;padding:5px;background:var(--pale);color:var(--navy);border:0.5px solid var(--navy);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Select all</button>
+          <button onclick="clearAllPlayers()" style="flex:1;padding:5px;background:#fcebeb;color:#c0392b;border:0.5px solid #e8a49a;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Clear all</button>
+        </div>
+        <div id="award-selected-count" style="font-size:11px;color:#888;font-weight:700;margin-bottom:10px;">No players selected</div>
+
         <div style="font-size:11px;font-weight:800;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">Reason</div>
         <div class="reasons-grid" id="reasons-grid"></div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;"><label style="font-size:11px;font-weight:700;color:#666;white-space:nowrap;">Points:</label><input style="width:70px;height:28px;font-size:13px;font-weight:800;text-align:center;" type="number" id="award-pts" value="1" min="1" max="99"></div>
@@ -3039,23 +3054,35 @@ function renderReasonsGrid(){
 window.selectReason=function(idx,el){selectedReason=idx;document.querySelectorAll('.reason-pill').forEach(p=>p.classList.remove('selected'));el.classList.add('selected');document.getElementById('award-pts').value=pointReasons[idx].pts;};
 window.awardPoints=async function(){
   if(!requireManager('award points'))return;
-  const sel=document.getElementById('award-player').value;if(!sel){alert('Please select a player.');return;}
+  const selectedPids = [...(window._selectedPlayerPids||new Set())];
+  if(!selectedPids.length){alert('Please select at least one player.');return;}
   if(selectedReason===null){alert('Please select a reason.');return;}
   const pts=parseInt(document.getElementById('award-pts').value)||1;
-  const player=squadData.find(p=>p.pid===sel);if(!player)return;
   const reason=pointReasons[selectedReason];
-  weeklyPts[sel]=(weeklyPts[sel]||0)+pts;
-  seasonPts[sel]=(seasonPts[sel]||0)+pts;
-  // Track weekly personal best
-  if(!personalBests) personalBests={};
-  if((weeklyPts[sel]||0) > (personalBests[sel]||0)) {
-    personalBests[sel] = weeklyPts[sel];
-  }
   const now=new Date();const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  pointsHistory.unshift({pid:sel,name:player.name,init:player.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(),reason:reason.label,emoji:reason.emoji,pts,date:now.getDate()+' '+months[now.getMonth()]});
-  document.getElementById('award-msg').textContent=`${player.name} awarded ${pts} Hake Points for "${reason.label}"! 🐟`;
+  const dateStr = now.getDate()+' '+months[now.getMonth()];
+
+  // Award to all selected players
+  for(const pid of selectedPids) {
+    const player=squadData.find(p=>p.pid===pid);if(!player)continue;
+    weeklyPts[pid]=(weeklyPts[pid]||0)+pts;
+    seasonPts[pid]=(seasonPts[pid]||0)+pts;
+    if(!personalBests) personalBests={};
+    if((weeklyPts[pid]||0) > (personalBests[pid]||0)) personalBests[pid]=weeklyPts[pid];
+    pointsHistory.unshift({pid,name:player.name,init:player.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(),reason:reason.label,emoji:reason.emoji,pts,date:dateStr});
+  }
+
+  // Show confirmation
+  const names = selectedPids.length === 1
+    ? squadData.find(p=>p.pid===selectedPids[0])?.name
+    : selectedPids.length + ' players';
+  document.getElementById('award-msg').textContent=`${names} awarded ${pts} Hake Points for "${reason.label}"! 🐟`;
   document.getElementById('award-confirm').style.display='block';
   setTimeout(()=>document.getElementById('award-confirm').style.display='none',3000);
+
+  // Clear selections
+  clearAllPlayers();
+
   await saveAppData();
   renderLeaderboard('weekly');renderLeaderboard('season');
   renderLatestAwards();
@@ -3157,11 +3184,63 @@ window.saveReasons = async function() {
   renderReasonsGrid();
   await saveAppData();
 };
+// Track selected players for multi-award
+window._selectedPlayerPids = new Set();
+
 function populateSelects(){
-  if(!document.getElementById('award-player')) return;
-  const o='<option value="">Select a player…</option>'+squadData.map(p=>`<option value="${p.pid}">${p.name}${p.nick?' '+p.nick:''}</option>`).join('');
-  document.getElementById('award-player').innerHTML=o;
-  document.getElementById('player-view-sel').innerHTML='<option value="">Select your player…</option>'+squadData.map(p=>`<option value="${p.pid}">${p.name}</option>`).join('');
+  // Build player multi-select grid for award panel
+  const grid = document.getElementById('award-player-grid');
+  if(grid) {
+    window._selectedPlayerPids = new Set();
+    grid.innerHTML = squadData.map(p => {
+      const initials = p.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+      return `<div class="player-select-pill" id="psp-${p.pid}" onclick="togglePlayerSelect('${p.pid}', this)">
+        <div class="ps-av">${initials}</div>
+        ${p.name.split(' ')[0]}
+      </div>`;
+    }).join('');
+    updateSelectedCount();
+  }
+  // Keep player view select
+  const pvSel = document.getElementById('player-view-sel');
+  if(pvSel) pvSel.innerHTML='<option value="">Select your player…</option>'+squadData.map(p=>`<option value="${p.pid}">${p.name}</option>`).join('');
+}
+
+window.togglePlayerSelect = function(pid, el) {
+  if(window._selectedPlayerPids.has(pid)) {
+    window._selectedPlayerPids.delete(pid);
+    el.classList.remove('selected');
+  } else {
+    window._selectedPlayerPids.add(pid);
+    el.classList.add('selected');
+  }
+  updateSelectedCount();
+};
+
+window.selectAllPlayers = function() {
+  window._selectedPlayerPids = new Set(squadData.map(p=>p.pid));
+  document.querySelectorAll('.player-select-pill').forEach(el=>el.classList.add('selected'));
+  updateSelectedCount();
+};
+
+window.clearAllPlayers = function() {
+  window._selectedPlayerPids = new Set();
+  document.querySelectorAll('.player-select-pill').forEach(el=>el.classList.remove('selected'));
+  updateSelectedCount();
+};
+
+function updateSelectedCount() {
+  const count = window._selectedPlayerPids.size;
+  const el = document.getElementById('award-selected-count');
+  if(el) {
+    if(count === 0) el.textContent = 'No players selected';
+    else if(count === 1) {
+      const pid = [...window._selectedPlayerPids][0];
+      const player = squadData.find(p=>p.pid===pid);
+      el.textContent = player ? '1 player selected — ' + player.name : '1 player selected';
+    } else el.textContent = count + ' players selected';
+    el.style.color = count > 0 ? 'var(--navy)' : '#888';
+  }
 }
 
 // TEAM SHEETS — TAP TO ASSIGN (mobile friendly)
