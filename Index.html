@@ -1549,6 +1549,10 @@ async function initApp() {
     if (d.folders) { folders = d.folders; } // Videos section merged — no render needed
     if (d.teams) { teams = d.teams; renderPool(); renderPanels(); refreshTabs(); renderTeamParentView(); }
     if (d.weeklyPts || d.seasonPts || d.squadData) { renderLeaderboard('weekly'); renderLeaderboard('season'); populateSelects(); renderReasonsGrid(); }
+    // Always refresh home dashboard when Firebase data arrives
+    if(document.getElementById('home') && document.getElementById('home').classList.contains('active')) {
+      renderHomeDashboard();
+    }
   });
 }
 
