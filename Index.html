@@ -3662,19 +3662,15 @@ function renderCoachMessage() {
 // Render personal stats strip
 function renderHomeStats() {
   if(!currentUser) return;
-  // Find player linked to this account
-  // Check parentUid, uid, or email match
-  // Find all children linked to this account
   const myPlayers = squadData.filter(p =>
     p.ownerUid === currentUser.uid ||
     p.parentUid === currentUser.uid ||
     p.uid === currentUser.uid
   );
-  // Use first child for stats (or most recently active)
-  const player = myPlayers[0] || null;
   const strip = document.getElementById('home-stats-strip');
+  if(!strip) return;
 
-  if(!player) {
+  if(!myPlayers.length) {
     // Manager view — show squad totals
     const totalWeekly = Object.values(weeklyPts).reduce((a,b)=>a+(b||0),0);
     const totalSeason = Object.values(seasonPts).reduce((a,b)=>a+(b||0),0);
@@ -3683,25 +3679,55 @@ function renderHomeStats() {
     const el3 = document.getElementById('stat-weekly-rank');
     if(el1) el1.textContent = totalWeekly;
     if(el2) el2.textContent = totalSeason;
-    if(el3) { el3.textContent = squadData.length; document.querySelector('.stat-card.green .stat-lbl').textContent = 'Players'; }
+    if(el3) el3.textContent = squadData.length;
+    const lbl = document.querySelector('.stat-card.green .stat-lbl');
+    if(lbl) lbl.textContent = 'Players';
     return;
   }
 
-  // Parent/player view — show their child's stats
-  const pid = player.pid;
-  const weekly = weeklyPts[pid] || 0;
-  const season = seasonPts[pid] || 0;
+  if(myPlayers.length === 1) {
+    // Single child — standard 3-card layout
+    const p = myPlayers[0];
+    const weekly = weeklyPts[p.pid] || 0;
+    const season = seasonPts[p.pid] || 0;
+    const sorted = [...squadData].sort((a,b)=>(weeklyPts[b.pid]||0)-(weeklyPts[a.pid]||0));
+    const rank = sorted.findIndex(x=>x.pid===p.pid) + 1;
+    const el1 = document.getElementById('stat-weekly-pts');
+    const el2 = document.getElementById('stat-season-pts');
+    const el3 = document.getElementById('stat-weekly-rank');
+    if(el1) el1.textContent = weekly;
+    if(el2) el2.textContent = season;
+    if(el3) el3.textContent = '#'+rank;
+    return;
+  }
 
-  // Calculate weekly rank
+  // Multiple children — one card per child showing their stats
   const sorted = [...squadData].sort((a,b)=>(weeklyPts[b.pid]||0)-(weeklyPts[a.pid]||0));
-  const rank = sorted.findIndex(p=>p.pid===pid) + 1;
-
-  const el1 = document.getElementById('stat-weekly-pts');
-  const el2 = document.getElementById('stat-season-pts');
-  const el3 = document.getElementById('stat-weekly-rank');
-  if(el1) el1.textContent = weekly;
-  if(el2) el2.textContent = season;
-  if(el3) el3.textContent = '#'+rank;
+  strip.style.gridTemplateColumns = '1fr';
+  strip.style.gap = '8px';
+  strip.innerHTML = myPlayers.map(p => {
+    const weekly = weeklyPts[p.pid] || 0;
+    const season = seasonPts[p.pid] || 0;
+    const rank = sorted.findIndex(x=>x.pid===p.pid) + 1;
+    const firstName = p.name.split(' ')[0];
+    return `<div style="background:white;border-radius:12px;padding:.75rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+      <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">${firstName}</div>
+      <div style="display:flex;justify-content:space-between;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--gold);line-height:1;">${weekly}</div>
+          <div style="font-size:9px;color:#888;font-weight:800;margin-top:2px;">This week 🐟</div>
+        </div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--navy);line-height:1;">${season}</div>
+          <div style="font-size:9px;color:#888;font-weight:800;margin-top:2px;">Season pts</div>
+        </div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#27ae60;line-height:1;">#${rank}</div>
+          <div style="font-size:9px;color:#888;font-weight:800;margin-top:2px;">Weekly rank</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // Render weekly focus compact
