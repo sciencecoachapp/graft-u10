@@ -609,11 +609,7 @@ button:hover{opacity:0.88;}
       <button class="manager-only" onclick="openChecklistModal()" style="display:none;background:none;border:none;color:var(--navy);font-size:11px;font-weight:700;cursor:pointer;padding:6px 0 0;font-family:inherit;width:100%;text-align:right;">✏️ Edit checklist</button>
     </div>
 
-    <!-- LATEST HAKE AWARDS -->
-    <div class="latest-awards-card" id="home-latest-awards">
-      <div class="awards-title">🐟 Latest Hake Points</div>
-      <div id="latest-awards-list"></div>
-    </div>
+
 
     <!-- COACH MESSAGE MODAL -->
     <div class="modal-overlay" id="coach-msg-modal">
@@ -3711,7 +3707,7 @@ function renderHomeStats() {
     const rank = sorted.findIndex(x=>x.pid===p.pid) + 1;
     const firstName = p.name.split(' ')[0];
     return `<div style="background:white;border-radius:12px;padding:.75rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-      <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">${firstName}</div>
+      <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">${firstName}'s Hake Points 🐟</div>
       <div style="display:flex;justify-content:space-between;">
         <div style="text-align:center;flex:1;">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--gold);line-height:1;">${weekly}</div>
