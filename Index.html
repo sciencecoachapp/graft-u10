@@ -1694,28 +1694,21 @@ function renderSquad() {
   // Show/hide parent register section
   // parent-register-wrap visibility handled by CSS data-role selector
 
-  // Show parent's own child edit card
+  // Show ALL children linked to this parent account
   if(!isM && uid) {
-    const myChild = squadData.find(p=>p.ownerUid===uid);
+    const myChildren = squadData.filter(p=>p.ownerUid===uid);
     const myChildSection = document.getElementById('my-child-section');
     const myChildCard = document.getElementById('my-child-card');
     if(myChildSection && myChildCard) {
-      if(myChild) {
+      if(myChildren.length > 0) {
         myChildSection.style.display='block';
-        const initials = myChild.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-        const av = myChild.photo
-          ? '<div class="av" style="background:none;overflow:hidden;"><img src="'+myChild.photo+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"></div>'
-          : '<div class="av"><div class="av-i">'+initials+'</div></div>';
-        myChildCard.innerHTML = '<div class="pcard">'
-          +av
-          +'<div class="pname">'+myChild.name+'</div>'
-          +'<div class="pnick">'+(myChild.nick||'')+'</div>'
-          +'<div class="pnum">#'+(myChild.num||'?')+'</div>'
-          +'<div style="display:flex;gap:4px;margin-top:6px;">'
-            +'<button data-mca="edit" data-pid="'+myChild.pid+'" style="flex:1;background:var(--pale);color:var(--navy);border:0.5px solid var(--navy);border-radius:6px;font-size:10px;font-weight:700;padding:4px 0;height:auto;cursor:pointer;"><i class="ti ti-pencil" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Edit</button>'
-            +'<button data-mca="remove" data-pid="'+myChild.pid+'" style="flex:1;background:#fcebeb;color:#c0392b;border:0.5px solid #e8a49a;border-radius:6px;font-size:10px;font-weight:700;padding:4px 0;height:auto;cursor:pointer;"><i class="ti ti-trash" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Remove</button>'
-          +'</div>'
-        +'</div>';
+        myChildCard.innerHTML = myChildren.map(myChild => {
+          const initials = myChild.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+          const av = myChild.photo
+            ? '<div class="av" style="background:none;overflow:hidden;"><img src="'+myChild.photo+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;"></div>'
+            : '<div class="av"><div class="av-i">'+initials+'</div></div>';
+          return '<div class="pcard" style="margin-bottom:8px;">'            +av            +'<div class="pname">'+myChild.name+'</div>'            +'<div class="pnick">'+(myChild.nick||'')+'</div>'            +'<div class="pnum">#'+(myChild.num||'?')+'</div>'            +'<div style="display:flex;gap:4px;margin-top:6px;">'              +'<button data-mca="edit" data-pid="'+myChild.pid+'" style="flex:1;background:var(--pale);color:var(--navy);border:0.5px solid var(--navy);border-radius:6px;font-size:10px;font-weight:700;padding:4px 0;height:auto;cursor:pointer;"><i class="ti ti-pencil" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Edit</button>'              +'<button data-mca="remove" data-pid="'+myChild.pid+'" style="flex:1;background:#fcebeb;color:#c0392b;border:0.5px solid #e8a49a;border-radius:6px;font-size:10px;font-weight:700;padding:4px 0;height:auto;cursor:pointer;"><i class="ti ti-trash" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Remove</button>'            +'</div>'          +'</div>';
+        }).join('');
         myChildCard.onclick = function(e) {
           const b = e.target.closest('[data-mca]'); if(!b) return;
           if(b.dataset.mca==='edit') openParentEditPlayerModal(b.dataset.pid);
