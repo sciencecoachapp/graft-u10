@@ -467,6 +467,115 @@ button:hover{opacity:0.88;}
 #loading .fish{font-size:48px;animation:bob 1s ease-in-out infinite;}
 @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 #loading p{color:rgba(255,255,255,0.7);font-size:14px;font-weight:700;}
+
+/* ============================================================
+   GRAFT ACADEMY STYLES
+   ============================================================ */
+.acad-tab-row{display:flex;gap:6px;margin-bottom:1rem;}
+.acad-tab-btn{flex:1;padding:8px;border-radius:10px;border:1.5px solid #e5e7eb;background:#fff;font-size:12px;font-weight:800;color:#666;cursor:pointer;font-family:inherit;}
+.acad-tab-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.pathway-row{display:flex;gap:10px;margin-bottom:1rem;}
+.pathway-btn{flex:1;padding:14px 10px;border-radius:12px;border:2px solid #e5e7eb;background:#fff;cursor:pointer;text-align:center;transition:all 0.15s;}
+.pathway-btn.active{border-color:var(--navy);background:var(--navy);color:white;}
+.pathway-btn.active .pl,.pathway-btn.active .ps{color:white!important;}
+.pi-icon{font-size:22px;display:block;margin-bottom:3px;}
+.pl{font-size:12px;font-weight:800;color:#111;display:block;}
+.ps{font-size:10px;color:#888;display:block;margin-top:2px;}
+.age-tip{background:#fff8e8;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:8px 12px;font-size:11px;color:#8a6520;margin-bottom:1rem;display:none;}
+.acad-btn{width:100%;padding:14px;background:var(--navy);color:white;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:.5rem;}
+.acad-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.plan-hero{background:var(--navy);color:white;border-radius:14px;padding:1.25rem;margin-bottom:1rem;}
+.plan-hero h2{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;}
+.plan-hero p{font-size:11px;opacity:0.7;margin-top:3px;}
+.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:10px;}
+.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.2);stroke-width:5;}
+.ring-fg{fill:none;stroke:var(--gold);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 0.5s;}
+.ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;}
+.progress-info{flex:1;}
+.progress-info .pi-label{font-size:13px;font-weight:800;opacity:0.9;}
+.progress-info .pi-sub{font-size:11px;opacity:0.6;margin-top:2px;}
+.overview-box{background:#fff8e8;border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:1rem;margin-bottom:1rem;font-size:13px;line-height:1.6;color:#333;}
+.week-card{background:white;border-radius:12px;margin-bottom:.75rem;border:1.5px solid #e5e7eb;overflow:hidden;}
+.week-card.completed{border-color:var(--green);}
+.week-card.current{border-color:var(--navy);}
+.week-header{padding:.875rem 1rem;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.week-badge{width:32px;height:32px;border-radius:50%;background:var(--pale);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--navy);flex-shrink:0;}
+.week-card.completed .week-badge{background:#e8f5ee;color:var(--green);}
+.week-card.current .week-badge{background:var(--navy);color:white;}
+.week-title-txt{flex:1;}
+.week-name{font-size:13px;font-weight:800;color:#111;}
+.week-sub{font-size:11px;color:#888;margin-top:1px;}
+.week-status{font-size:11px;font-weight:700;color:#888;}
+.week-card.completed .week-status{color:var(--green);}
+.week-body{display:none;padding:0 1rem 1rem;border-top:1px solid #f0f0f0;}
+.week-body.open{display:block;}
+.drill-row{display:flex;gap:10px;align-items:flex-start;padding:.75rem 0;border-bottom:.5px solid #f5f5f5;}
+.drill-row:last-child{border-bottom:none;}
+.drill-check{width:24px;height:24px;border-radius:6px;border:2px solid #d1d5db;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all 0.15s;}
+.drill-check.checked{background:var(--green);border-color:var(--green);}
+.drill-check.checked::after{content:'✓';color:white;font-size:13px;font-weight:900;}
+.drill-content{flex:1;}
+.drill-name-row{font-size:13px;font-weight:800;color:#111;}
+.drill-duration-badge{font-size:9px;font-weight:700;background:var(--navy);color:white;padding:1px 6px;border-radius:8px;margin-left:5px;vertical-align:middle;}
+.drill-detail{font-size:11px;color:#555;margin-top:4px;line-height:1.5;}
+.drill-steps{font-size:12px;color:#333;margin-top:5px;line-height:1.65;}
+.drill-success{font-size:11px;color:var(--green);background:#e8f5ee;border-radius:5px;padding:4px 7px;margin-top:5px;font-weight:700;}
+.parent-role{font-size:11px;color:#5a6e3a;background:#f0f5e8;border-radius:5px;padding:4px 7px;margin-top:5px;font-weight:700;}
+.milestone-box{background:var(--pale);border-radius:8px;padding:8px 12px;margin-top:.75rem;font-size:12px;color:var(--navy);font-weight:700;}
+.plan-card{background:white;border-radius:12px;padding:1rem;margin-bottom:.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);cursor:pointer;border:1.5px solid #e5e7eb;}
+.plan-card:active{background:#f9fafb;}
+.plan-card-header{display:flex;align-items:center;gap:10px;}
+.plan-icon{width:40px;height:40px;background:var(--pale);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.plan-info{flex:1;}
+.plan-name{font-size:13px;font-weight:800;color:#111;}
+.plan-meta{font-size:11px;color:#888;margin-top:2px;}
+.plan-progress-bar{background:#e5e7eb;border-radius:10px;height:6px;margin-top:8px;overflow:hidden;}
+.plan-progress-fill{background:var(--navy);height:100%;border-radius:10px;transition:width 0.3s;}
+.plan-progress-fill.done{background:var(--green);}
+.plan-pct{font-size:10px;color:#888;margin-top:3px;font-weight:700;}
+.acad-empty{text-align:center;padding:2rem;color:#999;}
+.acad-empty i{font-size:32px;display:block;margin-bottom:.5rem;opacity:0.4;}
+.acad-loading{text-align:center;padding:2rem;color:#666;}
+.fish-anim{font-size:32px;animation:acadbob 1s ease-in-out infinite;display:block;margin-bottom:.5rem;}
+@keyframes acadbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.acad-safety{background:#fff3cd;border-radius:8px;padding:.75rem;font-size:11px;color:#856404;margin-top:1rem;}
+.checks-box{background:white;border-radius:12px;padding:1rem;margin-bottom:.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.checks-box h3{font-size:13px;font-weight:800;margin-bottom:.5rem;color:var(--navy);}
+.check-item{font-size:12px;color:#444;padding:5px 0;border-bottom:.5px solid #f0f0f0;line-height:1.5;}
+.check-item:last-child{border-bottom:none;}
+.what-next{background:var(--navy);color:white;border-radius:12px;padding:1rem;margin-bottom:.75rem;}
+.what-next h3{font-size:13px;font-weight:800;margin-bottom:5px;}
+.what-next p{font-size:12px;opacity:.85;line-height:1.6;}
+.complete-banner{background:linear-gradient(135deg,#27ae60,#1e8449);color:white;border-radius:12px;padding:1.25rem;margin-bottom:1rem;text-align:center;}
+.complete-banner .trophy{font-size:36px;display:block;margin-bottom:.5rem;}
+.complete-banner h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;}
+.complete-banner p{font-size:12px;opacity:.85;margin-top:4px;}
+.evidence-area{margin-top:8px;padding-top:8px;border-top:.5px dashed #e5e7eb;}
+.evidence-btn{display:flex;align-items:center;gap:6px;background:#f0f4ff;border:1px dashed #b5c0d8;color:var(--navy);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;width:fit-content;}
+.evidence-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.evidence-thumb{width:70px;height:70px;border-radius:8px;object-fit:cover;border:2px solid #e5e7eb;}
+.evidence-wrap{position:relative;width:70px;}
+.evidence-del{position:absolute;top:-5px;right:-5px;width:18px;height:18px;background:#e24b4a;color:white;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900;}
+.coach-comment-box{background:#fff8e8;border:1.5px solid var(--gold);border-radius:8px;padding:8px 10px;margin-top:8px;}
+.coach-comment-label{font-size:9px;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.coach-comment-text{font-size:12px;color:#333;font-weight:700;}
+.coach-drill-card{background:#f9fafb;border-radius:10px;padding:.875rem;margin-bottom:.625rem;border:1px solid #e5e7eb;}
+.coach-drill-header{font-size:13px;font-weight:800;color:#111;margin-bottom:6px;}
+.reaction-row{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0;}
+.react-btn{font-size:16px;padding:4px 7px;border-radius:7px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all .1s;}
+.react-btn.selected{border-color:var(--navy);background:var(--pale);}
+.coach-note-input{width:100%;padding:8px;border-radius:7px;border:1px solid #e5e7eb;font-size:12px;font-family:inherit;margin-top:5px;}
+.save-comment-btn{margin-top:6px;padding:6px 14px;background:var(--navy);color:white;border:none;border-radius:7px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;}
+.player-row-acad{display:flex;align-items:center;gap:10px;padding:.75rem 0;border-bottom:.5px solid #f0f0f0;cursor:pointer;}
+.player-row-acad:last-child{border-bottom:none;}
+.player-av{width:36px;height:36px;border-radius:50%;background:var(--pale);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--navy);flex-shrink:0;}
+.player-info{flex:1;}
+.player-plan-name{font-size:13px;font-weight:800;color:#111;}
+.player-plan-meta{font-size:11px;color:#888;margin-top:1px;}
 </style>
 <!-- Firebase Compat SDK (global scope, no imports needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1023,6 +1132,126 @@ button:hover{opacity:0.88;}
     <div id="tips-list"></div>
   </div>
 
+  <!-- GRAFT ACADEMY -->
+  <div id="academy" class="section">
+    <div class="stitle" style="margin-bottom:1rem;"><i class="ti ti-brain"></i> Graft Academy</div>
+
+    <div class="acad-tab-row" id="acad-tab-row">
+      <button class="acad-tab-btn active" id="acadtab-plans" onclick="showAcadTab('tab-plans',this)"><i class="ti ti-list"></i> My Plans</button>
+      <button class="acad-tab-btn" id="acadtab-new" onclick="showAcadTab('tab-new',this)"><i class="ti ti-plus"></i> New Plan</button>
+      <button class="acad-tab-btn manager-only" id="acadtab-coach" onclick="showAcadTab('tab-coach',this)" style="display:none;"><i class="ti ti-shield"></i> Coach View</button>
+    </div>
+
+    <!-- MY PLANS -->
+    <div class="tab-panel active" id="tab-plans">
+      <div id="plans-list"></div>
+    </div>
+
+    <!-- NEW PLAN -->
+    <div class="tab-panel" id="tab-new">
+      <div class="pathway-row">
+        <div class="pathway-btn active" id="path-general" onclick="setPathway('general')">
+          <span class="pi-icon">🏉</span>
+          <span class="pl">General Skills</span>
+          <span class="ps">Any player, any position</span>
+        </div>
+        <div class="pathway-btn" id="path-position" onclick="setPathway('position')">
+          <span class="pi-icon">🎯</span>
+          <span class="pl">Position Focus</span>
+          <span class="ps">Target specific role skills</span>
+        </div>
+      </div>
+      <div class="age-tip" id="age-tip"></div>
+      <div class="fg">
+        <label>Player name</label>
+        <input type="text" id="p-name" placeholder="e.g. Hugo">
+      </div>
+      <div class="fg">
+        <label>Age group</label>
+        <select id="p-age" onchange="checkAge(this.value);populateSkills();">
+          <option value="">Select age...</option>
+          <option value="U7">U7 (age 6–7)</option>
+          <option value="U8">U8 (age 7–8)</option>
+          <option value="U9">U9 (age 8–9)</option>
+          <option value="U10">U10 (age 9–10)</option>
+          <option value="U11">U11 (age 10–11)</option>
+          <option value="U12">U12 (age 11–12)</option>
+          <option value="U13">U13 (age 12–13)</option>
+          <option value="U14">U14 (age 13–14)</option>
+        </select>
+      </div>
+      <div class="fg" id="position-field" style="display:none;">
+        <label>Position</label>
+        <select id="p-position">
+          <option value="Prop">Prop</option>
+          <option value="Hooker">Hooker</option>
+          <option value="Lock">Lock</option>
+          <option value="Flanker">Flanker</option>
+          <option value="Number 8">Number 8</option>
+          <option value="Scrum Half">Scrum Half</option>
+          <option value="Fly Half">Fly Half</option>
+          <option value="Centre">Centre</option>
+          <option value="Wing">Wing</option>
+          <option value="Fullback">Fullback</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Skill focus</label>
+        <select id="p-skill"></select>
+      </div>
+      <div class="fg">
+        <label>Experience level</label>
+        <select id="p-experience">
+          <option value="beginner">Beginner — just started playing</option>
+          <option value="developing" selected>Developing — played 1–2 seasons</option>
+          <option value="established">Established — played 3+ seasons</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Current level</label>
+        <select id="p-level">
+          <option value="building">Building basics</option>
+          <option value="developing" selected>Developing consistency</option>
+          <option value="refining">Refining and adding detail</option>
+          <option value="excelling">Excelling — ready for the next challenge</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Any specific goals? <span style="font-weight:400;text-transform:none;">(optional)</span></label>
+        <textarea id="p-goal" placeholder="e.g. I want to be able to pass accurately off both hands under pressure..."></textarea>
+      </div>
+      <div class="fg">
+        <label>Plan length</label>
+        <select id="p-timeframe">
+          <option value="2 weeks">2 weeks (quick boost)</option>
+          <option value="4 weeks" selected>4 weeks (solid foundation)</option>
+          <option value="6 weeks">6 weeks (full programme)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Time available per session</label>
+        <select id="p-time">
+          <option value="10-15 minutes">10–15 minutes</option>
+          <option value="15-20 minutes" selected>15–20 minutes</option>
+          <option value="20-30 minutes">20–30 minutes</option>
+          <option value="30+ minutes">30+ minutes</option>
+        </select>
+      </div>
+      <button class="acad-btn" onclick="generatePlan()" id="gen-btn">🏉 Generate My Development Plan</button>
+      <div id="gen-output"></div>
+    </div>
+
+    <!-- COACH VIEW (manager only) -->
+    <div class="tab-panel" id="tab-coach">
+      <div id="coach-plans-list"></div>
+    </div>
+
+    <!-- PLAN VIEW -->
+    <div class="tab-panel" id="tab-view">
+      <div id="plan-view-content"></div>
+    </div>
+  </div>
+
   <!-- PLAYER MODAL -->
   <div class="modal-overlay" id="player-modal">
     <div class="modal-box">
@@ -1527,8 +1756,8 @@ async function initApp() {
     if (seasonPts[p.pid]===undefined) seasonPts[p.pid]=0;
   });
 
-  const MANAGER_TABS = [{id:'home',icon:'ti-home',label:'Home'},{id:'sessions',icon:'ti-calendar-event',label:'Sessions'},{id:'planner',icon:'ti-layout-list',label:'Planner'},{id:'homedrills',icon:'ti-folders',label:'Drills & Videos'},{id:'hake',icon:'ti-trophy',label:'Hake Points'},{id:'teams',icon:'ti-shirt',label:'Teams'},{id:'squad',icon:'ti-users',label:'Squad'},{id:'parents',icon:'ti-heart',label:'Parents'}];
-  const PARENT_TABS = [{id:'home',icon:'ti-home',label:'Home'},{id:'sessions',icon:'ti-calendar-event',label:'Sessions'},{id:'homedrills',icon:'ti-folders',label:'Drills & Videos'},{id:'hake',icon:'ti-trophy',label:'Hake Points'},{id:'teams',icon:'ti-shirt',label:'Teams'},{id:'squad',icon:'ti-users',label:'Squad'},{id:'parents',icon:'ti-heart',label:'Tips'}];
+  const MANAGER_TABS = [{id:'home',icon:'ti-home',label:'Home'},{id:'sessions',icon:'ti-calendar-event',label:'Sessions'},{id:'planner',icon:'ti-layout-list',label:'Planner'},{id:'homedrills',icon:'ti-folders',label:'Drills & Videos'},{id:'hake',icon:'ti-trophy',label:'Hake Points'},{id:'teams',icon:'ti-shirt',label:'Teams'},{id:'squad',icon:'ti-users',label:'Squad'},{id:'academy',icon:'ti-brain',label:'Academy'},{id:'parents',icon:'ti-heart',label:'Parents'}];
+  const PARENT_TABS = [{id:'home',icon:'ti-home',label:'Home'},{id:'sessions',icon:'ti-calendar-event',label:'Sessions'},{id:'homedrills',icon:'ti-folders',label:'Drills & Videos'},{id:'hake',icon:'ti-trophy',label:'Hake Points'},{id:'teams',icon:'ti-shirt',label:'Teams'},{id:'squad',icon:'ti-users',label:'Squad'},{id:'academy',icon:'ti-brain',label:'Academy'},{id:'parents',icon:'ti-heart',label:'Tips'}];
   const tabs = currentRole==='manager' ? MANAGER_TABS : PARENT_TABS;
   document.getElementById('main-nav').innerHTML = tabs.map(t=>`<button class="nb${t.id==='home'?' active':''}" onclick="sw('${t.id}',this)"><i class="ti ${t.icon}"></i> ${t.label}</button>`).join('');
 
@@ -1609,6 +1838,7 @@ window.sw = function(id, btn) {
   if(id==='parents') { renderTips(); }
   if(id==='sessions') { renderPublishedSessions(); renderPastSessions(); }
   if(id==='homedrills') { renderDrillFolderGrid(); }
+  if(id==='academy') { loadPlans(); initAcademyForm(); }
 };
 
 function updateFocusUI() {
@@ -4264,6 +4494,466 @@ window.sendResetEmail = async function() {
 };
 
 // All functions are global — no window.x = x needed
+
+// ============================================================
+// GRAFT ACADEMY — Firebase storage functions
+// ============================================================
+async function academySave(planId, planData) {
+  if(!currentUser) return;
+  planData.uid = currentUser.uid;
+  planData.updatedAt = new Date().toISOString();
+  await db.collection('academyPlans').doc(planId).set(planData);
+}
+
+async function academyGet(planId) {
+  try {
+    const snap = await db.collection('academyPlans').doc(planId).get();
+    return snap.exists ? snap.data() : null;
+  } catch(e) { console.error('Academy get error:', e); return null; }
+}
+
+async function academyList() {
+  if(!currentUser) return [];
+  try {
+    let snap;
+    if(currentRole === 'manager') {
+      snap = await db.collection('academyPlans').get();
+    } else {
+      snap = await db.collection('academyPlans').where('uid','==',currentUser.uid).get();
+    }
+    return snap.docs.map(d=>d.data()).sort((a,b)=>(b.updatedAt||'')>(a.updatedAt||'')?1:-1);
+  } catch(e) { console.error('Academy list error:', e); return []; }
+}
+
+async function academyDeletePlan(planId) {
+  await db.collection('academyPlans').doc(planId).delete();
+}
+
+// ============================================================
+// ACADEMY — SKILL LISTS (RFU Regulation 15)
+// ============================================================
+const ACAD_SKILLS_ALL = ['Passing & Handling','Catching & Ball Skills','Footwork & Agility','Running Lines & Support Play','Fitness & Conditioning','Communication & Leadership','Game Understanding & Decision Making'];
+const ACAD_SKILLS_U9  = ['Tackling Basics & Body Position','Tackling & Defence','Ball Carrying into Contact'];
+const ACAD_SKILLS_U10 = ['Rucking & Counter-Rucking','Jackaling & Breakdown','Mauling','Support Play at the Breakdown'];
+const ACAD_SKILLS_U11 = ['Scrummaging & Set Piece'];
+
+function getSkills(age, pathway) {
+  let skills = [...ACAD_SKILLS_ALL];
+  const n = parseInt(age.replace('U',''));
+  if(n>=9) skills = skills.concat(ACAD_SKILLS_U9);
+  if(n>=10) skills = skills.concat(ACAD_SKILLS_U10);
+  if(n>=11) skills = skills.concat(ACAD_SKILLS_U11);
+  return skills;
+}
+
+// ============================================================
+// ACADEMY — UI HELPERS
+// ============================================================
+window.showAcadTab = function(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.acad-tab-btn').forEach(b=>b.classList.remove('active'));
+  const p = document.getElementById(id); if(p) p.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='tab-coach') loadCoachPlans();
+};
+
+window.setPathway = function(type) {
+  document.getElementById('path-general').classList.toggle('active', type==='general');
+  document.getElementById('path-position').classList.toggle('active', type==='position');
+  const pf = document.getElementById('position-field');
+  if(pf) pf.style.display = type==='position' ? 'block' : 'none';
+};
+
+window.populateSkills = function() {
+  const age = document.getElementById('p-age').value;
+  const sel = document.getElementById('p-skill');
+  if(!age || !sel) return;
+  const skills = getSkills(age, 'general');
+  sel.innerHTML = skills.map(s=>`<option value="${s}">${s}</option>`).join('');
+};
+
+window.checkAge = function(age) {
+  const tip = document.getElementById('age-tip');
+  if(!tip) return;
+  const msgs = {
+    'U7':'U7: Fun and fundamentals only — no tackling, no contact.',
+    'U8':'U8: Ball handling, running and enjoyment. No contact.',
+    'U9':'U9: Introducing touch tackling and basic defence.',
+    'U10':'U10: Full contact introduced. Rucking and breakdown basics.',
+    'U11':'U11: Set piece begins. Scrummaging introduced safely.',
+    'U12':'U12: Developing set piece and positional understanding.',
+    'U13':'U13: More tactical awareness and position-specific skills.',
+    'U14':'U14: Preparing for senior-style play and decision making.'
+  };
+  if(msgs[age]) { tip.textContent = msgs[age]; tip.style.display='block'; }
+  else { tip.style.display='none'; }
+};
+
+function initAcademyForm() {
+  // Pre-populate player name for parents from their registered child
+  if(currentRole !== 'manager' && squadData && currentUser) {
+    const myPlayer = squadData.find(p=>p.ownerUid===currentUser.uid);
+    const nameInp = document.getElementById('p-name');
+    if(myPlayer && nameInp && !nameInp.value) {
+      nameInp.value = myPlayer.name || '';
+    }
+  }
+}
+
+// ============================================================
+// ACADEMY — GENERATE PLAN
+// ============================================================
+window.generatePlan = async function() {
+  const name = (document.getElementById('p-name').value||'').trim();
+  const age  = document.getElementById('p-age').value;
+  const skill = document.getElementById('p-skill').value;
+  const exp  = document.getElementById('p-experience').value;
+  const level= document.getElementById('p-level').value;
+  const goal = (document.getElementById('p-goal').value||'').trim();
+  const timeframe = document.getElementById('p-timeframe').value;
+  const time = document.getElementById('p-time').value;
+  const isPosition = document.getElementById('path-position').classList.contains('active');
+  const position = isPosition ? document.getElementById('p-position').value : null;
+
+  if(!name) { showToast('Please enter the player\'s name'); return; }
+  if(!age)  { showToast('Please select an age group'); return; }
+  if(!skill){ showToast('Please select a skill focus'); return; }
+
+  const btn = document.getElementById('gen-btn');
+  const out = document.getElementById('gen-output');
+  btn.disabled = true; btn.textContent = '⏳ Generating plan...';
+  out.innerHTML = '<div class="acad-loading"><span class="fish-anim">🐟</span>Building your personalised plan...</div>';
+
+  const prompt = `Create a personalised rugby development plan for ${name}.
+Age group: ${age}
+${position?`Position: ${position}`:''}
+Skill focus: ${skill}
+Experience: ${exp}
+Current level: ${level}
+Plan length: ${timeframe}
+Time per session: ${time}
+${goal?`Goal: ${goal}`:''}
+
+Requirements:
+1. Week by week structure with clear engaging themes
+2. Exactly 3 drills per week — home/garden, minimal equipment (ball, cones/jumpers/markers, wall)
+3. Each drill must include:
+   - name: short drill name
+   - duration: time e.g. "10 mins"
+   - setup: exactly where to stand and what to place, written as instructions (max 25 words)
+   - what_to_do: step-by-step actions written DIRECTLY to the player using "you". Plain English only — no jargon. If a technical term is needed, explain it in brackets. (max 55 words)
+   - success_indicator: one sentence telling the player what good looks like, written to them using "you" (max 20 words)
+   - parent_role: what the parent or helper does during the drill. Short and clear. Empty string if no helper is needed. (max 15 words)
+4. Write directly to the player — use "you" throughout. Never write "the player should...". Use simple words a 10-year-old understands.
+5. Progressive — each week builds on the last
+6. Specific measurable milestones per week
+7. Encouraging motivating tone throughout
+8. what_next section at the end
+
+Respond ONLY with valid JSON, no markdown, no extra text:
+{"overview":"string","weeks":[{"week":1,"theme":"string","drills":[{"name":"string","duration":"string","setup":"string","what_to_do":"string","success_indicator":"string","parent_role":"string"}],"milestone":"string"}],"progress_checks":["string"],"what_next":"string"}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        system:'You are a rugby development coach. Always respond with valid compact JSON only. No markdown. Keep all string values concise. Write all drill instructions directly to the player using "you" — simple words a child understands, no jargon. Never leave JSON unterminated.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    if(!data.content||!data.content[0]) throw new Error('No response');
+    let text = data.content[0].text.trim();
+    text = text.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+    const plan = JSON.parse(text);
+    const planId = 'plan_'+Date.now();
+    const savedPlan = {id:planId,name,age,position:position||'',skill,timeframe,plan,progress:{},createdAt:new Date().toISOString()};
+    await academySave(planId, savedPlan);
+    out.innerHTML='';
+    btn.disabled=false; btn.textContent='🏉 Generate My Development Plan';
+    viewPlan(savedPlan);
+    showAcadTab('tab-view', null);
+    document.getElementById('acadtab-plans').classList.remove('active');
+  } catch(e) {
+    console.error('Academy generate error:', e);
+    out.innerHTML='<div style="color:#e24b4a;font-size:13px;padding:1rem;">Something went wrong — please try again.</div>';
+    btn.disabled=false; btn.textContent='🏉 Generate My Development Plan';
+  }
+};
+
+// ============================================================
+// ACADEMY — LOAD PLANS LIST
+// ============================================================
+window.loadPlans = async function() {
+  const el = document.getElementById('plans-list');
+  if(!el) return;
+  el.innerHTML='<div class="acad-loading"><span class="fish-anim">🐟</span>Loading your plans...</div>';
+  const plans = await academyList();
+  if(!plans.length) {
+    el.innerHTML=`<div class="acad-empty"><i class="ti ti-clipboard"></i><div>No plans yet</div><div style="font-size:12px;margin-top:4px;">Tap <strong>New Plan</strong> to generate your first development plan</div></div>`;
+    return;
+  }
+  el.innerHTML = plans.map(p=>{
+    const allDrills = (p.plan&&p.plan.weeks)?p.plan.weeks.reduce((a,w)=>a+(w.drills?w.drills.length:0),0):0;
+    const done = Object.values(p.progress||{}).filter(Boolean).length;
+    const pct = allDrills ? Math.round(done/allDrills*100) : 0;
+    return `<div class="plan-card" onclick="viewPlanById('${p.id}')">
+      <div class="plan-card-header">
+        <div class="plan-icon">🏉</div>
+        <div class="plan-info">
+          <div class="plan-name">${p.name} — ${p.skill}</div>
+          <div class="plan-meta">${p.age} · ${p.timeframe} · Started ${(p.createdAt||'').slice(0,10)}</div>
+        </div>
+      </div>
+      <div class="plan-progress-bar"><div class="plan-progress-fill${pct===100?' done':''}" style="width:${pct}%"></div></div>
+      <div class="plan-pct">${pct}% complete — ${done}/${allDrills} drills done</div>
+    </div>`;
+  }).join('');
+};
+
+window.viewPlanById = async function(id) {
+  const p = await academyGet(id);
+  if(!p) return;
+  viewPlan(p);
+  showAcadTab('tab-view', null);
+  document.querySelectorAll('.acad-tab-btn').forEach(b=>b.classList.remove('active'));
+};
+
+window.viewPlan = function(savedPlan) {
+  const {id,name,age,skill,timeframe,plan,progress} = savedPlan;
+  const allDrills = plan.weeks.reduce((a,w)=>a+(w.drills?w.drills.length:0),0);
+  const done = Object.values(progress||{}).filter(Boolean).length;
+  const pct = allDrills ? Math.round(done/allDrills*100) : 0;
+  const r=56,c=2*Math.PI*r*0.8,offset=c-(pct/100*c);
+  const isCoachView = currentRole==='manager';
+
+  const weeksHtml = plan.weeks.map((w,wi)=>{
+    const weekDrills = w.drills?w.drills.length:0;
+    const weekDone = w.drills?w.drills.filter((_,di)=>!!progress[`${wi}_${di}`]).length:0;
+    const weekComplete = weekDrills>0 && weekDone===weekDrills;
+    const currentW = getCurrentWeek(savedPlan);
+    const isCurrent = wi===currentW;
+
+    const drillsHtml = (w.drills||[]).map((d,di)=>{
+      const checked = !!progress[`${wi}_${di}`];
+      const cc = savedPlan.coachComments&&savedPlan.coachComments[`${wi}_${di}`];
+      const coachBlock = cc ? `<div class="coach-comment-box"><div class="coach-comment-label">🏅 Coach feedback</div><div class="coach-comment-text">${cc.reaction||''} ${cc.note||''}</div></div>` : '';
+      const coachInputBlock = isCoachView ? `
+        <div style="margin-top:8px;">
+          <div class="reaction-row">
+            ${['⭐','🔥','👍','💪','🎯'].map(e=>`<button class="react-btn${cc&&cc.reaction===e?' selected':''}" onclick="setCoachReaction('${id}',${wi},${di},'${e}',this)">${e}</button>`).join('')}
+          </div>
+          <textarea class="coach-note-input" id="note-${wi}-${di}" placeholder="Add a coaching note...">${cc&&cc.note?cc.note:''}</textarea>
+          <button class="save-comment-btn" onclick="saveCoachComment('${id}',${wi},${di})">Save note</button>
+        </div>` : '';
+      return `<div class="drill-row">
+        <div class="drill-check${checked?' checked':''}" onclick="toggleDrill('${id}',${wi},${di},this)"></div>
+        <div class="drill-content">
+          <div class="drill-name-row">${d.name}<span class="drill-duration-badge">${d.duration}</span></div>
+          <div class="drill-detail"><strong>Setup:</strong> ${d.setup}</div>
+          <div class="drill-steps">${d.what_to_do||d.coaching_points||''}</div>
+          ${d.parent_role?`<div class="parent-role">👨‍👩‍👦 Helper: ${d.parent_role}</div>`:''}
+          <div class="drill-success">✅ Nailing it when: ${d.success_indicator}</div>
+          ${coachBlock}
+          ${coachInputBlock}
+          ${checked&&!isCoachView ? buildEvidenceArea(id,wi,di,savedPlan) : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="week-card${weekComplete?' completed':isCurrent?' current':''}" id="week-${wi}">
+      <div class="week-header" onclick="toggleWeek(${wi})">
+        <div class="week-badge">${weekComplete?'✓':wi+1}</div>
+        <div class="week-title-txt">
+          <div class="week-name">Week ${wi+1} — ${w.theme}</div>
+          <div class="week-sub">${weekDone}/${weekDrills} drills done</div>
+        </div>
+        <div class="week-status">${weekComplete?'Complete ✓':isCurrent?'Current':''}</div>
+      </div>
+      <div class="week-body${isCurrent||weekComplete?' open':''}" id="week-body-${wi}">
+        ${drillsHtml}
+        ${w.milestone?`<div class="milestone-box">🎯 Week goal: ${w.milestone}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const completeBanner = pct===100?`<div class="complete-banner"><span class="trophy">🏆</span><h3>Plan Complete!</h3><p>Brilliant work. You've put in the Graft!</p></div>`:'';
+
+  document.getElementById('plan-view-content').innerHTML=`
+    <div class="plan-hero">
+      <button onclick="showAcadTab('tab-plans',null);loadPlans();" style="background:rgba(255,255,255,0.15);border:none;color:white;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;">← All plans</button>
+      <h2>${name}'s Development Plan</h2>
+      <p>${skill} · ${age} · ${timeframe}</p>
+      <div class="progress-wrap">
+        <div class="ring-wrap">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle class="ring-bg" cx="28" cy="28" r="22"/>
+            <circle class="ring-fg" cx="28" cy="28" r="22" stroke-dasharray="${c}" stroke-dashoffset="${offset}"/>
+          </svg>
+          <div class="ring-txt">${pct}%</div>
+        </div>
+        <div class="progress-info">
+          <div class="pi-label">${done} of ${allDrills} drills done</div>
+          <div class="pi-sub">${pct===100?'Plan complete — brilliant work!':'Keep going — do the Graft!'}</div>
+        </div>
+      </div>
+    </div>
+    ${completeBanner}
+    ${plan.overview?`<div class="overview-box">${plan.overview}</div>`:''}
+    ${weeksHtml}
+    ${plan.progress_checks&&plan.progress_checks.length?`<div class="checks-box"><h3>📋 Progress checks</h3>${plan.progress_checks.map(c=>`<div class="check-item">• ${c}</div>`).join('')}</div>`:''}
+    ${plan.what_next?`<div class="what-next"><h3>⚡ What next?</h3><p>${plan.what_next}</p></div>`:''}
+    <div style="margin-top:1rem;text-align:center;">
+      <button onclick="if(confirm('Delete this plan?')) { academyDeletePlan('${id}'); showAcadTab('tab-plans',null); loadPlans(); }" style="background:transparent;border:1px solid #e24b4a;color:#e24b4a;border-radius:8px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🗑 Delete plan</button>
+    </div>`;
+};
+
+window.toggleDrill = async function(planId, wi, di, el) {
+  const p = await academyGet(planId);
+  if(!p) return;
+  if(!p.progress) p.progress = {};
+  p.progress[`${wi}_${di}`] = !p.progress[`${wi}_${di}`];
+  await academySave(planId, p);
+  el.classList.toggle('checked', !!p.progress[`${wi}_${di}`]);
+  viewPlan(p);
+};
+
+window.toggleWeek = function(wi) {
+  const b = document.getElementById('week-body-'+wi);
+  if(b) b.classList.toggle('open');
+};
+
+function getCurrentWeek(p) {
+  const weeks = p.plan&&p.plan.weeks?p.plan.weeks:[];
+  for(let i=0;i<weeks.length;i++){
+    const drills=weeks[i].drills||[];
+    const done=drills.filter((_,di)=>!!(p.progress||{})[`${i}_${di}`]).length;
+    if(done<drills.length) return i;
+  }
+  return weeks.length-1;
+}
+
+function buildEvidenceArea(planId, wi, di, p) {
+  const evidence = (p.progress&&p.progress[`${wi}_${di}_evidence`])||[];
+  const thumbs = evidence.map((e,ei)=>`
+    <div class="evidence-wrap">
+      ${e.type==='video'
+        ?`<video class="evidence-thumb-video" src="${e.url}" onclick="viewEvidence('${e.url}')" style="cursor:pointer;"></video>`
+        :`<img class="evidence-thumb" src="${e.url}" onclick="viewEvidence('${e.url}')" style="cursor:pointer;">`}
+      <div class="evidence-del" onclick="deleteEvidence('${planId}',${wi},${di},${ei})">✕</div>
+    </div>`).join('');
+  return `<div class="evidence-area">
+    <label class="evidence-btn" for="ev-${wi}-${di}">
+      <i class="ti ti-camera" style="font-size:13px;"></i> Add photo/video evidence
+      <input type="file" id="ev-${wi}-${di}" accept="image/*,video/*" style="display:none;" onchange="uploadEvidence(this,'${planId}',${wi},${di})">
+    </label>
+    ${thumbs?`<div class="evidence-grid">${thumbs}</div>`:''}
+  </div>`;
+}
+
+window.uploadEvidence = async function(input, planId, wi, di) {
+  if(!input.files||!input.files[0]) return;
+  const file = input.files[0];
+  const p = await academyGet(planId);
+  if(!p) return;
+  if(!p.progress) p.progress={};
+  showToast('Uploading...');
+  try {
+    const url = await uploadPhoto(file, currentUser?currentUser.uid:'anon');
+    const key = `${wi}_${di}_evidence`;
+    if(!p.progress[key]) p.progress[key]=[];
+    p.progress[key].push({url, type: file.type.startsWith('video')?'video':'image'});
+    await academySave(planId, p);
+    viewPlan(p);
+    showToast('Evidence uploaded!');
+  } catch(e) { showToast('Upload failed — try again'); }
+};
+
+window.deleteEvidence = async function(planId, wi, di, ei) {
+  const p = await academyGet(planId);
+  if(!p) return;
+  const key = `${wi}_${di}_evidence`;
+  if(p.progress&&p.progress[key]) {
+    p.progress[key].splice(ei,1);
+    await academySave(planId, p);
+    viewPlan(p);
+  }
+};
+
+window.viewEvidence = function(url) {
+  window.open(url,'_blank');
+};
+
+// ============================================================
+// ACADEMY — COACH VIEW (manager only)
+// ============================================================
+window.loadCoachPlans = async function() {
+  const el = document.getElementById('coach-plans-list');
+  if(!el) return;
+  el.innerHTML='<div class="acad-loading"><span class="fish-anim">🐟</span>Loading all players\' plans...</div>';
+  const plans = await academyList();
+  if(!plans.length) {
+    el.innerHTML='<div class="acad-empty"><i class="ti ti-users"></i><div>No plans generated yet</div></div>';
+    return;
+  }
+  // Group by player name
+  const grouped = {};
+  plans.forEach(p=>{ const k=p.name||'Unknown'; if(!grouped[k]) grouped[k]=[]; grouped[k].push(p); });
+  el.innerHTML = Object.entries(grouped).map(([playerName, playerPlans])=>{
+    const rows = playerPlans.map(p=>{
+      const allDrills=(p.plan&&p.plan.weeks)?p.plan.weeks.reduce((a,w)=>a+(w.drills?w.drills.length:0),0):0;
+      const done=Object.values(p.progress||{}).filter(v=>v===true).length;
+      const pct=allDrills?Math.round(done/allDrills*100):0;
+      return `<div class="player-row-acad" onclick="viewCoachPlan('${p.id}')">
+        <div class="player-info">
+          <div class="player-plan-name">${p.skill} · ${p.timeframe}</div>
+          <div class="player-plan-meta">Started ${(p.createdAt||'').slice(0,10)} · ${pct}% done</div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">${pct}%</div>
+      </div>`;
+    }).join('');
+    return `<div style="background:white;border-radius:12px;padding:1rem;margin-bottom:.75rem;border:1.5px solid #e5e7eb;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div class="player-av">${playerName.charAt(0).toUpperCase()}</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);">${playerName}</div>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+};
+
+window.viewCoachPlan = async function(planId) {
+  const p = await academyGet(planId);
+  if(!p) return;
+  viewPlan(p);
+  showAcadTab('tab-view', null);
+  document.querySelectorAll('.acad-tab-btn').forEach(b=>b.classList.remove('active'));
+};
+
+window.setCoachReaction = async function(planId, wi, di, emoji, el) {
+  const p = await academyGet(planId);
+  if(!p) return;
+  if(!p.coachComments) p.coachComments={};
+  if(!p.coachComments[`${wi}_${di}`]) p.coachComments[`${wi}_${di}`]={};
+  p.coachComments[`${wi}_${di}`].reaction = emoji;
+  await academySave(planId, p);
+  document.querySelectorAll('.react-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+window.saveCoachComment = async function(planId, wi, di) {
+  const p = await academyGet(planId);
+  if(!p) return;
+  if(!p.coachComments) p.coachComments={};
+  if(!p.coachComments[`${wi}_${di}`]) p.coachComments[`${wi}_${di}`]={};
+  const inp = document.getElementById(`note-${wi}-${di}`);
+  if(inp) p.coachComments[`${wi}_${di}`].note = inp.value;
+  await academySave(planId, p);
+  showToast('Note saved!');
+};
 
 </script>
 </body>
