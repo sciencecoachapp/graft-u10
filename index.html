@@ -4658,7 +4658,7 @@ Respond ONLY with valid JSON, no markdown, no extra text:
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:4000,
         system:'You are a rugby development coach. Always respond with valid compact JSON only. No markdown. Keep all string values concise. Write all drill instructions directly to the player using "you" — simple words a child understands, no jargon. Never leave JSON unterminated.',
         messages:[{role:'user',content:prompt}]
