@@ -4654,7 +4654,7 @@ Respond ONLY with valid JSON, no markdown, no extra text:
 {"overview":"string","weeks":[{"week":1,"theme":"string","drills":[{"name":"string","duration":"string","setup":"string","what_to_do":"string","success_indicator":"string","parent_role":"string"}],"milestone":"string"}],"progress_checks":["string"],"what_next":"string"}`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('https://graft-proxy.t-d-haycock.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
