@@ -1495,10 +1495,21 @@ window.registerUser = async function() {
 };
 
 window.signOut = async function() {
+  if (typeof window._appDataUnsubscribe === 'function') {
+    window._appDataUnsubscribe();
+    window._appDataUnsubscribe = null;
+  }
   await fbSignOut(auth);
 };
 
 // AUTH STATE
+// Any account created before this date is a genuine legacy account (from before
+// multi-team support existed) and safe to auto-migrate to St Ives U10s.
+// Accounts created on/after this date with no teamPath indicate a real
+// registration problem — they must NOT be silently defaulted to a team,
+// since that would put their data in someone else's squad.
+const LEGACY_TEAM_CUTOFF = '2026-07-28T00:00:00.000Z';
+
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('loading').style.display = 'none';
   if (user) {
@@ -1506,14 +1517,34 @@ onAuthStateChanged(auth, async (user) => {
     const userData = await loadFromCloud('users/'+user.uid);
     console.log('User data loaded:', userData);
     currentUserData = userData;
+
+    // Safety check — accounts with no teamPath must never silently fall back
+    // to a default team. Only genuine pre-multi-team accounts get migrated.
+    if (userData && !userData.teamPath) {
+      const isLegacyAccount = userData.createdAt && userData.createdAt < LEGACY_TEAM_CUTOFF;
+      if (isLegacyAccount) {
+        try {
+          await pathToDoc('users/'+user.uid).update({teamPath:'stives-u10s', teamName:'Under 10s', clubName:'St Ives RFC', season:'2026/27'});
+          userData.teamPath = 'stives-u10s'; userData.teamName = 'Under 10s'; userData.clubName = 'St Ives RFC'; userData.season = '2026/27';
+        } catch(e) {}
+      } else {
+        // Not a legacy account — this is a broken registration. Block access
+        // rather than risk mixing this user's data into the wrong team.
+        console.error('Account has no teamPath and is not legacy — blocking login to prevent cross-team data leak.');
+        await fbSignOut(auth);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+        const err = document.getElementById('login-err');
+        if(err) { err.style.color = '#c0392b'; err.textContent = 'This account isn\'t linked to a team. Please contact your coach, or register again with your club code.'; err.style.display = 'block'; }
+        return;
+      }
+    }
+
     currentRole = (userData && userData.role) ? userData.role : 'parent';
     currentTeamPath = (userData && userData.teamPath) ? userData.teamPath : 'stives-u10s';
     currentTeamDisplayName = (userData && userData.teamName) ? userData.teamName : 'Under 10s';
     console.log('Current role set to:', currentRole, '| Team:', currentTeamPath);
-    // Migrate existing users who don't have teamPath yet
-    if(userData && !userData.teamPath) {
-      try { await pathToDoc('users/'+user.uid).update({teamPath:'stives-u10s', teamName:'Under 10s', clubName:'St Ives RFC', season:'2026/27'}); } catch(e) {}
-    }
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     initApp();
@@ -1609,7 +1640,14 @@ async function initApp() {
 
   // ss-warmup removed — sessions are now dynamically rendered
 
-  onSnapshot(pathToDoc('appData/' + currentTeamPath), (snap) => {
+  // Tear down any listener from a previous login in this tab (e.g. coach signed
+  // out and signed back in as a different team's account) — without this, the
+  // old listener kept firing and could overwrite the new team's in-memory data.
+  if (typeof window._appDataUnsubscribe === 'function') {
+    window._appDataUnsubscribe();
+    window._appDataUnsubscribe = null;
+  }
+  window._appDataUnsubscribe = onSnapshot(pathToDoc('appData/' + currentTeamPath), (snap) => {
     if (!snap.exists()) return;
     const d = snap.data();
     if (d.focusText) focusText = d.focusText;
