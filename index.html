@@ -522,6 +522,12 @@ button:hover{opacity:0.88;}
       <div id="reg-code-wrap">
         <div class="auth-field"><label>Club code <span style="font-weight:400;color:#999;">(from your coach)</span></label><input type="text" id="reg-code" placeholder="e.g. STIVES2025" style="text-transform:uppercase;"></div>
       </div>
+      <div class="auth-field" style="margin-top:4px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;font-weight:400;text-transform:none;font-size:11px;color:#555;line-height:1.55;cursor:pointer;">
+          <input type="checkbox" id="reg-consent" style="width:16px;height:16px;flex-shrink:0;margin-top:1px;accent-color:var(--navy);">
+          <span>I understand that coaches and other parents on this team may see photos and videos I upload (e.g. of my child practising or at training), and I consent to this being used for coaching and development purposes. <a href="/privacy-policy" target="_blank" style="color:var(--navy);font-weight:700;">Privacy policy</a></span>
+        </label>
+      </div>
       <button class="auth-btn" onclick="registerUser()">Create account</button>
       <div class="auth-err" id="reg-err"></div>
     </div>
@@ -1460,6 +1466,7 @@ window.registerUser = async function() {
   const pass = document.getElementById('reg-password').value;
   const role = document.getElementById('reg-role').value;
   const code = (document.getElementById('reg-code').value||'').trim().toUpperCase();
+  const consentGiven = document.getElementById('reg-consent').checked;
   const err = document.getElementById('reg-err');
   err.style.display='none';
   if (!name || !email || !pass) { err.textContent='Please fill in all fields.'; err.style.display='block'; return; }
@@ -1468,6 +1475,7 @@ window.registerUser = async function() {
   const teamConfig = TEAM_REGISTRY[code];
   if (!teamConfig) { err.textContent='Club code not recognised — please check with your coach.'; err.style.display='block'; return; }
   if (role==='manager' && !teamConfig.allowsManager) { err.textContent='This code does not allow manager registration.'; err.style.display='block'; return; }
+  if (!consentGiven) { err.textContent='Please confirm the photo/video consent checkbox to continue.'; err.style.display='block'; return; }
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await setDoc(doc(db,'users',cred.user.uid), {
@@ -1476,6 +1484,8 @@ window.registerUser = async function() {
       teamName: teamConfig.teamName,
       clubName: teamConfig.clubName,
       season:   teamConfig.season,
+      mediaConsent: true,
+      mediaConsentAt: new Date().toISOString(),
       createdAt: new Date().toISOString()
     });
   } catch(e) {
@@ -2523,6 +2533,7 @@ function renderPublishedSessions() {
             <span class="badge bo">${idx===0?'Next up':'Upcoming'}</span>
             <div class="manager-only" style="display:${currentRole==='manager'?'flex':'none'};gap:4px;">
               <button class="fab" data-sess-action="edit" data-sess-id="${s.id}" title="Edit session"><i class="ti ti-pencil" style="pointer-events:none;"></i></button>
+              <button class="fab" data-sess-action="duplicate" data-sess-id="${s.id}" title="Duplicate session" style="color:#185fa5;border-color:#8fb8e0;"><i class="ti ti-copy" style="pointer-events:none;"></i></button>
               <button class="fab" data-sess-action="archive" data-sess-id="${s.id}" title="Archive session" style="color:#8a6520;border-color:#c8a96e;"><i class="ti ti-archive" style="pointer-events:none;"></i></button>
               <button class="fab del" data-sess-action="delete" data-sess-id="${s.id}" title="Delete session"><i class="ti ti-trash" style="pointer-events:none;"></i></button>
             </div>
@@ -2550,6 +2561,7 @@ function renderPublishedSessions() {
       const id = btn.dataset.sessId;
       const z = btn.dataset.sessZ;
       if(action==='edit') editSession(id);
+      else if(action==='duplicate') duplicateSession(id);
       else if(action==='archive') archiveSession(id);
       else if(action==='delete') deleteSession(id);
       else if(action==='phase') selPublishedPhase(id, z);
@@ -2646,6 +2658,23 @@ window.editSession = function(id) {
   renderPlannerFromData();
   showToast('Session loaded — edit and republish!');
   saveAppData();
+};
+
+// Load a copy of a session into the planner WITHOUT removing the original —
+// perfect for repeating a similar warm-up/drills week to week
+window.duplicateSession = function(id) {
+  if(!requireManager('duplicate session'))return;
+  const s = publishedSessions.find(x=>x.id===id) || archivedSessions.find(x=>x.id===id);
+  if(!s) return;
+  plannerPhaseDefs = getSessionPhaseDefs(s).map(ph=>Object.assign({},ph));
+  pzData = {};
+  plannerPhaseDefs.forEach(ph=>{ pzData[ph.id] = (s.phases[ph.id]||[]).map(a=>Object.assign({},a)); });
+  sw('planner',null);
+  document.getElementById('sess-title-inp').value = s.title || '';
+  document.getElementById('sess-date-inp').value = ''; // new date needed — don't carry the old one over
+  document.getElementById('sess-time-inp').value = s.time||'';
+  renderPlannerFromData();
+  showToast('Session duplicated — set a new date and publish!');
 };
 
 // YOUTUBE EXTRACT
@@ -3769,6 +3798,7 @@ function renderPastSessions() {
       +'</div>'
       +'<div style="display:flex;gap:5px;">'
         +'<button class="pbtn" data-past-action="restore" data-sess-id="'+s.id+'" style="font-size:10px;padding:4px 9px;height:auto;color:var(--green);border-color:var(--green);"><i class="ti ti-arrow-up" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Restore</button>'
+        +'<button class="pbtn" data-past-action="duplicate" data-sess-id="'+s.id+'" style="font-size:10px;padding:4px 9px;height:auto;color:#185fa5;border-color:#8fb8e0;"><i class="ti ti-copy" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i> Duplicate</button>'
         +'<button class="pbtn" data-past-action="permdelete" data-sess-id="'+s.id+'" style="font-size:10px;padding:4px 9px;height:auto;background:#fcebeb;color:#c0392b;border-color:#e8a49a;"><i class="ti ti-trash" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i></button>'
       +'</div>'
     +'</div>'
@@ -3782,6 +3812,7 @@ function renderPastSessions() {
     const action = btn.dataset.pastAction;
     const id = btn.dataset.sessId;
     if(action==='restore') restoreSession(id);
+    else if(action==='duplicate') duplicateSession(id);
     else if(action==='permdelete') permDeleteSession(id);
   };
 }
