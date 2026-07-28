@@ -254,7 +254,7 @@ button:hover{opacity:0.88;}
 .pz-g{background:#fdf3e3;border:1.5px solid var(--gold);}
 .pz-name-inp{font-size:12px;font-weight:800;background:transparent;border:none;border-bottom:1px dashed rgba(0,0,0,0.25);outline:none;height:auto;padding:0 0 2px;border-radius:0;min-width:80px;}
 .pz-w .pz-name-inp,.pz-m .pz-name-inp{color:var(--navy);}.pz-g .pz-name-inp{color:#8a6520;}
-.pz-remove{background:transparent;border:none;color:inherit;opacity:0.5;cursor:pointer;font-size:13px;padding:0 2px;height:auto;flex-shrink:0;}
+.pz-remove{background:transparent;border:none;color:inherit;opacity:0.5;cursor:pointer;font-size:12px;padding:2px 3px;height:auto;flex-shrink:0;line-height:1;}
 .pz-remove:hover{opacity:1;}
 .pz-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
 .pz-name{font-size:12px;font-weight:800;flex:1;}
@@ -2228,12 +2228,16 @@ function renderPlannerFromData() {
 function renderPhaseZones() {
   const container = document.getElementById('phase-zones-container');
   if(!container) return;
-  container.innerHTML = plannerPhaseDefs.map(ph => `
+  container.innerHTML = plannerPhaseDefs.map((ph, i) => `
     <div class="pzone pz-${ph.style}" data-phase-id="${ph.id}">
       <div class="pz-hdr">
         <i class="ti ${ph.icon}" style="font-size:11px;"></i>
         <input class="pz-name-inp" data-phase-name="${ph.id}" value="${ph.name.replace(/"/g,'&quot;')}" placeholder="Phase name">
         <input class="t-inp" id="pt-${ph.id}" value="${ph.duration}">
+        <div style="display:flex;gap:1px;flex-shrink:0;">
+          ${i>0?`<button class="pz-remove" data-move-phase="up" data-phase-id="${ph.id}" title="Move up"><i class="ti ti-arrow-up" style="pointer-events:none;"></i></button>`:''}
+          ${i<plannerPhaseDefs.length-1?`<button class="pz-remove" data-move-phase="down" data-phase-id="${ph.id}" title="Move down"><i class="ti ti-arrow-down" style="pointer-events:none;"></i></button>`:''}
+        </div>
         ${plannerPhaseDefs.length>1?`<button class="pz-remove" data-remove-phase="${ph.id}" title="Remove phase"><i class="ti ti-x" style="pointer-events:none;"></i></button>`:''}
       </div>
       <div class="pz-items" id="zi-${ph.id}"><span class="dhint">Tap activities above to add them here</span></div>
@@ -2249,10 +2253,22 @@ function renderPhaseZones() {
   container.onclick = function(e) {
     const rmBtn = e.target.closest('[data-remove-phase]');
     if(rmBtn) { removePlannerPhase(rmBtn.dataset.removePhase); return; }
+    const mvBtn = e.target.closest('[data-move-phase]');
+    if(mvBtn) { movePlannerPhase(mvBtn.dataset.phaseId, mvBtn.dataset.movePhase); return; }
   };
   // Fill in each zone's activities
   plannerPhaseDefs.forEach(ph => renderZone(ph.id));
 }
+
+window.movePlannerPhase = function(id, direction) {
+  capturePhaseEditsFromDOM(); // don't lose any in-progress renames/duration edits
+  const idx = plannerPhaseDefs.findIndex(p=>p.id===id);
+  if(idx===-1) return;
+  const swapWith = direction==='up' ? idx-1 : idx+1;
+  if(swapWith<0 || swapWith>=plannerPhaseDefs.length) return;
+  [plannerPhaseDefs[idx], plannerPhaseDefs[swapWith]] = [plannerPhaseDefs[swapWith], plannerPhaseDefs[idx]];
+  renderPhaseZones();
+};
 
 window.addPlannerPhase = function() {
   const id = 'ph' + Date.now();
