@@ -11,8 +11,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="description" content="St Ives RFC Under 10s Training App">
-<title>St Ives RFC · Under 10s</title>
+<meta name="description" content="St Ives RFC Training App">
+<title>St Ives RFC Training App</title>
 <!-- build:1778933385 -->
 <link rel="manifest" href="data:application/json,{%22name%22:%22St%20Ives%20RFC%22,%22short_name%22:%22SIRFC%22,%22display%22:%22standalone%22,%22background_color%22:%22%231a2b4a%22,%22theme_color%22:%22%231a2b4a%22,%22start_url%22:%22/%22}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -252,6 +252,10 @@ button:hover{opacity:0.88;}
 .pz-w{background:var(--pale);border:1.5px solid #b5c0d8;}
 .pz-m{background:#f0f3f9;border:1.5px solid var(--navy);}
 .pz-g{background:#fdf3e3;border:1.5px solid var(--gold);}
+.pz-name-inp{font-size:12px;font-weight:800;background:transparent;border:none;border-bottom:1px dashed rgba(0,0,0,0.25);outline:none;height:auto;padding:0 0 2px;border-radius:0;min-width:80px;}
+.pz-w .pz-name-inp,.pz-m .pz-name-inp{color:var(--navy);}.pz-g .pz-name-inp{color:#8a6520;}
+.pz-remove{background:transparent;border:none;color:inherit;opacity:0.5;cursor:pointer;font-size:13px;padding:0 2px;height:auto;flex-shrink:0;}
+.pz-remove:hover{opacity:1;}
 .pz-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
 .pz-name{font-size:12px;font-weight:800;flex:1;}
 .pz-w .pz-name,.pz-m .pz-name{color:var(--navy);}.pz-g .pz-name{color:#8a6520;}
@@ -483,7 +487,7 @@ button:hover{opacity:0.88;}
 </div>
 <div id="loading">
   <div class="fish">🐟</div>
-  <p>Loading St Ives RFC...</p>
+  <p>Loading St Ives RFC Training App...</p>
 </div>
 
 <!-- AUTH SCREEN -->
@@ -491,7 +495,7 @@ button:hover{opacity:0.88;}
   <div class="auth-box">
     <div class="auth-badge" style="padding:0;overflow:hidden;"><img src="https://stivesrfc.co.uk/wp-content/uploads/2019/08/St-Ives-RFC-Badge.png" alt="St Ives RFC" style="width:100%;height:100%;object-fit:cover;" onerror="this.innerHTML='ST<br>IVES<br>RFC';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center'"></div>
     <div class="auth-title">St Ives RFC</div>
-    <div class="auth-sub">Under 10s Training App</div>
+    <div class="auth-sub">Training App</div>
     <div class="auth-tabs">
       <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign in</div>
       <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Register</div>
@@ -521,7 +525,7 @@ button:hover{opacity:0.88;}
       <button class="auth-btn" onclick="registerUser()">Create account</button>
       <div class="auth-err" id="reg-err"></div>
     </div>
-    <div class="auth-info">St Ives RFC · Under 10s · 2026/27<br>Data stored securely in the EU 🔒</div>
+    <div class="auth-info">St Ives RFC · All age groups<br>Enter your club code to join your team<br>Data stored securely in the EU 🔒</div>
   </div>
 </div>
 
@@ -721,23 +725,9 @@ button:hover{opacity:0.88;}
       <div class="pool-items" id="pool"></div>
     </div>
 
-    <!-- PHASES -->
-    <div class="pzone pz-w">
-      <div class="pz-hdr"><span class="pz-name"><i class="ti ti-sun" style="font-size:11px;vertical-align:-1px;"></i> Warm-up</span><input class="t-inp" id="pt-wu" value="15 mins"></div>
-      <div class="pz-items" id="zi-wu"><span class="dhint">Tap activities above to add them here</span></div>
-    </div>
-    <div class="pzone pz-m">
-      <div class="pz-hdr"><span class="pz-name"><i class="ti ti-whistle" style="font-size:11px;vertical-align:-1px;"></i> Training session 1</span><input class="t-inp" id="pt-t1" value="25 mins"></div>
-      <div class="pz-items" id="zi-t1"><span class="dhint">Tap activities above to add them here</span></div>
-    </div>
-    <div class="pzone pz-m">
-      <div class="pz-hdr"><span class="pz-name"><i class="ti ti-whistle" style="font-size:11px;vertical-align:-1px;"></i> Training session 2</span><input class="t-inp" id="pt-t2" value="25 mins"></div>
-      <div class="pz-items" id="zi-t2"><span class="dhint">Tap activities above to add them here</span></div>
-    </div>
-    <div class="pzone pz-g">
-      <div class="pz-hdr"><span class="pz-name"><i class="ti ti-flag" style="font-size:11px;vertical-align:-1px;"></i> Practice match</span><input class="t-inp" id="pt-pm" value="15 mins"></div>
-      <div class="pz-items" id="zi-pm"><span class="dhint">Tap activities above to add them here</span></div>
-    </div>
+    <!-- PHASES (dynamic) -->
+    <div id="phase-zones-container"></div>
+    <button class="add-btn" onclick="addPlannerPhase()" style="margin-bottom:.875rem;"><i class="ti ti-plus"></i> Add another phase</button>
 
     <div style="display:flex;gap:7px;margin-top:.875rem;">
       <button class="pbtn" onclick="clearPlanner()"><i class="ti ti-trash" style="font-size:11px;vertical-align:-2px;"></i> Clear</button>
@@ -766,17 +756,13 @@ button:hover{opacity:0.88;}
     <div class="modal-box">
       <div class="modal-title" id="add-activity-title">Add to phase</div>
       <div style="font-size:13px;color:#666;margin-bottom:1rem;">Which phase would you like to add this activity to?</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <button class="pbtn" style="text-align:left;padding:10px 14px;height:auto;background:var(--pale);color:var(--navy);border-color:#b5c0d8;" onclick="addActivityToZone('wu')"><i class="ti ti-sun" style="font-size:13px;vertical-align:-1px;"></i> Warm-up</button>
-        <button class="pbtn" style="text-align:left;padding:10px 14px;height:auto;background:var(--navy);color:#fff;border-color:var(--navy);" onclick="addActivityToZone('t1')"><i class="ti ti-whistle" style="font-size:13px;vertical-align:-1px;"></i> Training session 1</button>
-        <button class="pbtn" style="text-align:left;padding:10px 14px;height:auto;background:var(--navy);color:#fff;border-color:var(--navy);" onclick="addActivityToZone('t2')"><i class="ti ti-whistle" style="font-size:13px;vertical-align:-1px;"></i> Training session 2</button>
-        <button class="pbtn" style="text-align:left;padding:10px 14px;height:auto;background:#fdf3e3;color:#8a6520;border-color:var(--gold);" onclick="addActivityToZone('pm')"><i class="ti ti-flag" style="font-size:13px;vertical-align:-1px;"></i> Practice match</button>
-      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="add-activity-phase-list"></div>
       <div style="margin-top:1rem;">
         <button class="pbtn" style="width:100%;" onclick="document.getElementById('add-activity-modal').classList.remove('open')">Cancel</button>
       </div>
     </div>
   </div>
+
 
   <!-- VIDEOS SECTION REMOVED — merged into Drills & Videos tab -->
 
@@ -1179,21 +1165,21 @@ const TEAM_REGISTRY = {
     const metaTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
     if(metaTitle) metaTitle.content = cfg.clubName;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if(metaDesc) metaDesc.content = cfg.clubName + ' ' + cfg.teamName + ' Training App';
+    if(metaDesc) metaDesc.content = cfg.clubName + ' Training App';
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if(metaTheme) metaTheme.content = cfg.primaryColour;
     // Loading screen
     const loadingTxt = document.querySelector('#loading p');
-    if(loadingTxt) loadingTxt.textContent = 'Loading ' + cfg.clubName + '...';
-    // Auth screen
+    if(loadingTxt) loadingTxt.textContent = 'Loading ' + cfg.clubName + ' Training App...';
+    // Auth screen — kept team-agnostic since the user hasn't logged in yet
     const authBadge = document.querySelector('.auth-badge');
     if(authBadge) authBadge.innerHTML = cfg.badgeInitials.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
     const authTitle = document.querySelector('.auth-title');
     if(authTitle) authTitle.textContent = cfg.clubName;
     const authSub = document.querySelector('.auth-sub');
-    if(authSub) authSub.textContent = cfg.teamName + ' Training App';
+    if(authSub) authSub.textContent = 'Training App';
     const authInfo = document.querySelector('.auth-info');
-    if(authInfo) authInfo.innerHTML = cfg.clubName + ' · ' + cfg.teamName + ' · ' + cfg.season + '<br>Data stored securely in the EU 🔒';
+    if(authInfo) authInfo.innerHTML = cfg.clubName + ' · All age groups<br>Enter your club code to join your team<br>Data stored securely in the EU 🔒';
     // Header
     const clubBadge = document.getElementById('club-badge');
     if(clubBadge) clubBadge.innerHTML = cfg.badgeInitials.replace(/\\n/g,'<br>').replace(/\n/g,'<br>');
@@ -1357,6 +1343,14 @@ let editingTipId = null;
 
 const medals = ['🥇','🥈','🥉'];
 let pzData = {wu:[],t1:[],t2:[],pm:[]};
+// Dynamic phase definitions — coaches can add/remove/rename phases.
+// style cycles through w/m/g for visual variety (pz-w, pz-m, pz-g CSS classes)
+let plannerPhaseDefs = [
+  {id:'wu', name:'Warm-up',            icon:'ti-sun',     duration:'15 mins', style:'w'},
+  {id:'t1', name:'Training session 1', icon:'ti-whistle', duration:'25 mins', style:'m'},
+  {id:'t2', name:'Training session 2', icon:'ti-whistle', duration:'25 mins', style:'m'},
+  {id:'pm', name:'Practice match',     icon:'ti-flag',    duration:'15 mins', style:'g'}
+];
 let publishedSessions = [];
 let archivedSessions = [];
 let checklistChecked = {}; // persisted checkbox states by date
@@ -1546,6 +1540,7 @@ async function initApp() {
     if (appData.folders) folders = appData.folders;
     if (appData.teams) teams = appData.teams;
     if (appData.pzData) pzData = appData.pzData;
+    if (appData.plannerPhaseDefs && appData.plannerPhaseDefs.length) plannerPhaseDefs = appData.plannerPhaseDefs;
     if (appData.squadData) squadData = appData.squadData;
     if (appData.checklistItems) checklistItems = appData.checklistItems;
     if (appData.parentTips) parentTips = appData.parentTips;
@@ -1631,7 +1626,7 @@ async function initApp() {
 }
 
 async function saveAppData() {
-  const data = { focusText, focusDate, weeklyPts, seasonPts, pointsHistory, pointReasons, folders, teams, pzData, squadData, checklistItems, parentTips, publishedSessions, archivedSessions, activityPool, drillFolders, checklistChecked, weeklyResetDay, personalBests, coachMessage };
+  const data = { focusText, focusDate, weeklyPts, seasonPts, pointsHistory, pointReasons, folders, teams, pzData, plannerPhaseDefs, squadData, checklistItems, parentTips, publishedSessions, archivedSessions, activityPool, drillFolders, checklistChecked, weeklyResetDay, personalBests, coachMessage };
   await saveToCloud('appData/' + currentTeamPath, data);
 }
 
@@ -2222,11 +2217,73 @@ window.saveActivities = async function() {
 let _pendingActivity = null; // holds activity being added
 
 function renderPlannerFromData() {
-  ['wu','t1','t2','pm'].forEach(z=>renderZone(z));
+  renderPhaseZones();
   // restore session detail fields if draft exists
   if(pzData.sessTitle) document.getElementById('sess-title-inp').value = pzData.sessTitle;
   if(pzData.sessDate) document.getElementById('sess-date-inp').value = pzData.sessDate;
   if(pzData.sessTime) document.getElementById('sess-time-inp').value = pzData.sessTime;
+}
+
+// Build the phase zone cards from plannerPhaseDefs, then fill each with its activities
+function renderPhaseZones() {
+  const container = document.getElementById('phase-zones-container');
+  if(!container) return;
+  container.innerHTML = plannerPhaseDefs.map(ph => `
+    <div class="pzone pz-${ph.style}" data-phase-id="${ph.id}">
+      <div class="pz-hdr">
+        <i class="ti ${ph.icon}" style="font-size:11px;"></i>
+        <input class="pz-name-inp" data-phase-name="${ph.id}" value="${ph.name.replace(/"/g,'&quot;')}" placeholder="Phase name">
+        <input class="t-inp" id="pt-${ph.id}" value="${ph.duration}">
+        ${plannerPhaseDefs.length>1?`<button class="pz-remove" data-remove-phase="${ph.id}" title="Remove phase"><i class="ti ti-x" style="pointer-events:none;"></i></button>`:''}
+      </div>
+      <div class="pz-items" id="zi-${ph.id}"><span class="dhint">Tap activities above to add them here</span></div>
+    </div>`
+  ).join('');
+  // Wire up rename + remove via event delegation (capture phase needed since blur doesn't bubble)
+  container.addEventListener('blur', function(e){
+    const inp = e.target.closest && e.target.closest('[data-phase-name]');
+    if(!inp) return;
+    const ph = plannerPhaseDefs.find(p=>p.id===inp.dataset.phaseName);
+    if(ph) ph.name = inp.value.trim() || ph.name;
+  }, true);
+  container.onclick = function(e) {
+    const rmBtn = e.target.closest('[data-remove-phase]');
+    if(rmBtn) { removePlannerPhase(rmBtn.dataset.removePhase); return; }
+  };
+  // Fill in each zone's activities
+  plannerPhaseDefs.forEach(ph => renderZone(ph.id));
+}
+
+window.addPlannerPhase = function() {
+  const id = 'ph' + Date.now();
+  const styles = ['w','m','g'];
+  const nextStyle = styles[plannerPhaseDefs.length % styles.length];
+  plannerPhaseDefs.push({id, name:'New phase', icon:'ti-circle', duration:'10 mins', style:nextStyle});
+  if(!pzData[id]) pzData[id] = [];
+  renderPhaseZones();
+  setTimeout(()=>{
+    const inp = document.querySelector(`[data-phase-name="${id}"]`);
+    if(inp) { inp.focus(); inp.select(); }
+  }, 50);
+};
+
+window.removePlannerPhase = function(id) {
+  if(plannerPhaseDefs.length<=1) { showToast("You need at least one phase"); return; }
+  const ph = plannerPhaseDefs.find(p=>p.id===id);
+  if(!confirm('Remove "' + (ph?ph.name:'this phase') + '"? Any activities in it will be removed too.')) return;
+  plannerPhaseDefs = plannerPhaseDefs.filter(p=>p.id!==id);
+  delete pzData[id];
+  renderPhaseZones();
+};
+
+// Read the latest phase names + durations from the DOM before saving/publishing
+function capturePhaseEditsFromDOM() {
+  plannerPhaseDefs.forEach(ph => {
+    const nameInp = document.querySelector(`[data-phase-name="${ph.id}"]`);
+    const durInp = document.getElementById('pt-'+ph.id);
+    if(nameInp && nameInp.value.trim()) ph.name = nameInp.value.trim();
+    if(durInp) ph.duration = durInp.value.trim() || ph.duration;
+  });
 }
 
 // TAP ON ACTIVITY PILL — show phase picker modal
@@ -2235,6 +2292,12 @@ window.showAddActivityModal = function(id, icon, label) {
   const act = activityPool.find(a => a.id === id);
   _pendingActivity = {id, icon: act?act.icon:icon, label: act?act.label:label};
   document.getElementById('add-activity-title').textContent = 'Add "' + (act?act.label:label) + '" to…';
+  const styleColours = {w:{bg:'var(--pale)',col:'var(--navy)',border:'#b5c0d8'}, m:{bg:'var(--navy)',col:'#fff',border:'var(--navy)'}, g:{bg:'#fdf3e3',col:'#8a6520',border:'var(--gold)'}};
+  const list = document.getElementById('add-activity-phase-list');
+  list.innerHTML = plannerPhaseDefs.map(ph => {
+    const c = styleColours[ph.style] || styleColours.m;
+    return `<button class="pbtn" style="text-align:left;padding:10px 14px;height:auto;background:${c.bg};color:${c.col};border-color:${c.border};" onclick="addActivityToZone('${ph.id}')"><i class="ti ${ph.icon}" style="font-size:13px;vertical-align:-1px;"></i> ${ph.name}</button>`;
+  }).join('');
   document.getElementById('add-activity-modal').classList.add('open');
 };
 
@@ -2242,6 +2305,7 @@ window.showAddActivityModal = function(id, icon, label) {
 window.addActivityToZone = function(z) {
   document.getElementById('add-activity-modal').classList.remove('open');
   if(!_pendingActivity) return;
+  if(!pzData[z]) pzData[z] = [];
   // allow same activity in multiple zones but not twice in same zone
   if(pzData[z].find(x=>x.id===_pendingActivity.id)) {
     showToast(_pendingActivity.label + ' already in this phase!');
@@ -2249,7 +2313,8 @@ window.addActivityToZone = function(z) {
   }
   pzData[z].push({id:_pendingActivity.id, label:_pendingActivity.label, icon:_pendingActivity.icon});
   renderZone(z);
-  showToast('Added to ' + {wu:'Warm-up',t1:'Training 1',t2:'Training 2',pm:'Practice match'}[z] + '!');
+  const ph = plannerPhaseDefs.find(p=>p.id===z);
+  showToast('Added to ' + (ph?ph.name:'phase') + '!');
   _pendingActivity = null;
 };
 
@@ -2317,7 +2382,8 @@ function renderZone(z){
 window.zrem=function(z,id){pzData[z]=pzData[z].filter(x=>x.id!==id);renderZone(z);};
 
 window.clearPlanner=function(){
-  Object.keys(pzData).forEach(z=>{if(Array.isArray(pzData[z]))pzData[z]=[];renderZone(z);});
+  Object.keys(pzData).forEach(z=>{if(Array.isArray(pzData[z]))pzData[z]=[];});
+  plannerPhaseDefs.forEach(ph=>renderZone(ph.id));
   document.getElementById('sess-title-inp').value='';
   document.getElementById('sess-date-inp').value='';
   document.getElementById('sess-time-inp').value='';
@@ -2326,6 +2392,7 @@ window.clearPlanner=function(){
 
 window.savePlannerDraft=async function(){
   if(!requireManager('save draft'))return;
+  capturePhaseEditsFromDOM();
   pzData.sessTitle = document.getElementById('sess-title-inp').value.trim();
   pzData.sessDate = document.getElementById('sess-date-inp').value.trim();
   pzData.sessTime = document.getElementById('sess-time-inp').value.trim();
@@ -2335,22 +2402,23 @@ window.savePlannerDraft=async function(){
 window.publishPlan=async function(){
   if(!requireManager('publish session'))return;
 
-  // Capture video URLs from DOM inputs before anything else
-  ['wu','t1','t2','pm'].forEach(z=>{
-    const el=document.getElementById('zi-'+z);
+  // Capture latest phase names/durations, then video URLs from DOM inputs
+  capturePhaseEditsFromDOM();
+  plannerPhaseDefs.forEach(ph=>{
+    const el=document.getElementById('zi-'+ph.id);
     if(!el)return;
     el.querySelectorAll('input[type="url"]').forEach((inp,i)=>{
-      if(pzData[z]&&pzData[z][i]) pzData[z][i].videoUrl = inp.value.trim();
+      if(pzData[ph.id]&&pzData[ph.id][i]) pzData[ph.id][i].videoUrl = inp.value.trim();
     });
   });
 
-  // Capture timings safely (inputs may not exist)
+  // Capture session detail fields safely (inputs may not exist)
   function getVal(id,fallback){ const el=document.getElementById(id); return el?el.value.trim():fallback; }
   const title = getVal('sess-title-inp','');
   const date  = getVal('sess-date-inp','');
   const time  = getVal('sess-time-inp','');
 
-  const hasActivities = ['wu','t1','t2','pm'].some(z=>pzData[z]&&pzData[z].length);
+  const hasActivities = plannerPhaseDefs.some(ph=>pzData[ph.id]&&pzData[ph.id].length);
 
   // Soft validation — warn but don't block if fields are empty
   if(!title && !date && !hasActivities){
@@ -2362,23 +2430,16 @@ window.publishPlan=async function(){
     return;
   }
 
+  const phasesSnapshot = {};
+  plannerPhaseDefs.forEach(ph=>{ phasesSnapshot[ph.id] = (pzData[ph.id]||[]).map(a=>Object.assign({},a)); });
+
   const newSession = {
     id: 'sess' + Date.now(),
     title: title || 'Training session',
     date:  date  || '',
     time:  time  || '',
-    phases: {
-      wu: (pzData.wu||[]).map(a=>Object.assign({},a)),
-      t1: (pzData.t1||[]).map(a=>Object.assign({},a)),
-      t2: (pzData.t2||[]).map(a=>Object.assign({},a)),
-      pm: (pzData.pm||[]).map(a=>Object.assign({},a))
-    },
-    timings: {
-      wu: getVal('pt-wu','15 mins'),
-      t1: getVal('pt-t1','25 mins'),
-      t2: getVal('pt-t2','25 mins'),
-      pm: getVal('pt-pm','15 mins')
-    },
+    phaseDefs: plannerPhaseDefs.map(ph=>Object.assign({},ph)), // snapshot so this session always renders correctly
+    phases: phasesSnapshot,
     publishedAt: new Date().toISOString()
   };
 
@@ -2408,6 +2469,22 @@ window.loadSmEmb=function(btn){
 };
 
 // PUBLISHED SESSIONS — render in Sessions tab
+// Legacy sessions (published before dynamic phases) don't have phaseDefs saved —
+// this reconstructs sensible defaults so old sessions still display correctly.
+const LEGACY_PHASE_DEFS = [
+  {id:'wu', name:'Warm-up',            icon:'ti-sun',     duration:'15 mins', style:'w'},
+  {id:'t1', name:'Training session 1', icon:'ti-whistle', duration:'25 mins', style:'m'},
+  {id:'t2', name:'Training session 2', icon:'ti-whistle', duration:'25 mins', style:'m'},
+  {id:'pm', name:'Practice match',     icon:'ti-flag',    duration:'15 mins', style:'g'}
+];
+function getSessionPhaseDefs(s) {
+  if(s.phaseDefs && s.phaseDefs.length) return s.phaseDefs;
+  // Legacy session — merge saved timings onto legacy defaults if present
+  return LEGACY_PHASE_DEFS.map(ph => Object.assign({}, ph, {
+    duration: (s.timings && s.timings[ph.id]) ? s.timings[ph.id] : ph.duration
+  }));
+}
+
 function renderPublishedSessions() {
   const container = document.getElementById('published-sessions-list');
   if(!container) return;
@@ -2416,7 +2493,9 @@ function renderPublishedSessions() {
     return;
   }
   container.innerHTML = publishedSessions.map((s,idx) => {
-    const phaseCount = ['wu','t1','t2','pm'].filter(z=>s.phases[z]&&s.phases[z].length).length;
+    const phaseDefs = getSessionPhaseDefs(s);
+    const activeDefs = phaseDefs.filter(ph => s.phases[ph.id] && s.phases[ph.id].length);
+    const firstActiveId = activeDefs.length ? activeDefs[0].id : (phaseDefs[0]?phaseDefs[0].id:'');
     return `<div class="sess-card" id="sess-${s.id}">
       <div class="sess-card-hdr">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;">
@@ -2435,20 +2514,14 @@ function renderPublishedSessions() {
         </div>
         <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:8px;">${s.title}</div>
         <div class="session-summary">
-          ${s.phases.wu&&s.phases.wu.length?`<div class="ss-block ss-w" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="wu"><div class="ss-lbl">Warm-up</div><div class="ss-time">${s.timings.wu||'15 mins'}</div></div>`:''}
-          ${s.phases.t1&&s.phases.t1.length?`<div class="ss-block ss-m" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="t1"><div class="ss-lbl">Training 1</div><div class="ss-time">${s.timings.t1||'25 mins'}</div></div>`:''}
-          ${s.phases.t2&&s.phases.t2.length?`<div class="ss-block ss-m" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="t2"><div class="ss-lbl">Training 2</div><div class="ss-time">${s.timings.t2||'25 mins'}</div></div>`:''}
-          ${s.phases.pm&&s.phases.pm.length?`<div class="ss-block ss-g" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="pm"><div class="ss-lbl">Match</div><div class="ss-time">${s.timings.pm||'15 mins'}</div></div>`:''}
+          ${activeDefs.map(ph=>`<div class="ss-block ss-${ph.style}" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="${ph.id}"><div class="ss-lbl">${ph.name}</div><div class="ss-time">${ph.duration||'15 mins'}</div></div>`).join('')}
         </div>
       </div>
       <div class="phase-nav" id="pnav-${s.id}">
-        ${s.phases.wu&&s.phases.wu.length?`<button class="phase-nav-btn pnb-w active" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="wu"><span class="phase-pip"></span>Warm-up</button>`:''}
-        ${s.phases.t1&&s.phases.t1.length?`<button class="phase-nav-btn pnb-m" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="t1"><span class="phase-pip"></span>Training 1</button>`:''}
-        ${s.phases.t2&&s.phases.t2.length?`<button class="phase-nav-btn pnb-m" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="t2"><span class="phase-pip"></span>Training 2</button>`:''}
-        ${s.phases.pm&&s.phases.pm.length?`<button class="phase-nav-btn pnb-g" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="pm"><span class="phase-pip"></span>Match</button>`:''}
+        ${activeDefs.map((ph,i)=>`<button class="phase-nav-btn pnb-${ph.style}${i===0?' active':''}" data-sess-action="phase" data-sess-id="${s.id}" data-sess-z="${ph.id}"><span class="phase-pip"></span>${ph.name}</button>`).join('')}
       </div>
       <div id="pcontent-${s.id}" style="padding:.875rem 1rem;">
-        ${renderPhaseContent(s, ['wu','t1','t2','pm'].find(z=>s.phases[z]&&s.phases[z].length)||'wu')}
+        ${firstActiveId ? renderPhaseContent(s, firstActiveId) : ''}
       </div>
     </div>`;
   }).join('');
@@ -2470,11 +2543,11 @@ function renderPublishedSessions() {
 
 function renderPhaseContent(s, activeZ) {
   const phase = s.phases[activeZ]||[];
-  const phaseNames = {wu:'Warm-up',t1:'Training session 1',t2:'Training session 2',pm:'Practice match'};
-  const phaseIcons = {wu:'ti-sun',t1:'ti-whistle',t2:'ti-whistle',pm:'ti-flag'};
-  const timingBg = activeZ==='pm'?'background:#fdf3e3;color:#8a6520;':'background:var(--pale);color:var(--navy);';
-  const headerCol = activeZ==='pm'?'#8a6520':'var(--navy)';
-  const icoCol = activeZ==='pm'?'background:#c8a96e;':'background:var(--navy);';
+  const phaseDefs = getSessionPhaseDefs(s);
+  const ph = phaseDefs.find(p=>p.id===activeZ) || {name:'Phase', icon:'ti-circle', duration:'15 mins', style:'m'};
+  const timingBg = ph.style==='g'?'background:#fdf3e3;color:#8a6520;':(ph.style==='w'?'background:var(--pale);color:var(--navy);':'background:var(--pale);color:var(--navy);');
+  const headerCol = ph.style==='g'?'#8a6520':'var(--navy)';
+  const icoCol = ph.style==='g'?'background:#c8a96e;':'background:var(--navy);';
 
   const activitiesHtml = phase.map(a => {
     const vid = a.videoUrl ? extractYT(a.videoUrl) : null;
@@ -2501,10 +2574,10 @@ function renderPhaseContent(s, activeZ) {
 
   return `<div class="phase-header-bar">
     <div style="display:flex;align-items:center;gap:7px;">
-      <i class="ti ${phaseIcons[activeZ]}" style="font-size:15px;color:${headerCol};"></i>
-      <span style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:${headerCol};">${phaseNames[activeZ]}</span>
+      <i class="ti ${ph.icon}" style="font-size:15px;color:${headerCol};"></i>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:${headerCol};">${ph.name}</span>
     </div>
-    <span class="phase-time-tag" style="${timingBg}">${s.timings[activeZ]||'15 mins'}</span>
+    <span class="phase-time-tag" style="${timingBg}">${ph.duration||'15 mins'}</span>
   </div>
   ${activitiesHtml||'<div style="font-size:12px;color:#999;font-style:italic;padding:.5rem 0;">No activities for this phase.</div>'}`;
 }
@@ -2520,9 +2593,15 @@ window.selPublishedPhase = function(sessId, z) {
   const s = publishedSessions.find(x=>x.id===sessId); if(!s) return;
   // update nav buttons
   const nav = document.getElementById('pnav-'+sessId);
-  if(nav) nav.querySelectorAll('.phase-nav-btn').forEach(b=>b.classList.remove('active'));
-  // find and activate correct button
-  if(nav){const btns=nav.querySelectorAll('.phase-nav-btn');btns.forEach(b=>{if((z==='wu'&&b.textContent.includes('Warm'))||(z==='t1'&&b.textContent.includes('Training 1'))||(z==='t2'&&b.textContent.includes('Training 2'))||(z==='pm'&&b.textContent.includes('Match')))b.classList.add('active');});}
+  if(nav) {
+    nav.querySelectorAll('.phase-nav-btn').forEach(b=>b.classList.remove('active'));
+    const phaseDefs = getSessionPhaseDefs(s);
+    const ph = phaseDefs.find(p=>p.id===z);
+    if(ph){
+      const btns=nav.querySelectorAll('.phase-nav-btn');
+      btns.forEach(b=>{ if(b.textContent.trim()===ph.name) b.classList.add('active'); });
+    }
+  }
   const content = document.getElementById('pcontent-'+sessId);
   if(content) content.innerHTML = renderPhaseContent(s, z);
 };
@@ -2539,19 +2618,15 @@ window.deleteSession = async function(id) {
 window.editSession = function(id) {
   if(!requireManager('edit session'))return;
   const s = publishedSessions.find(x=>x.id===id); if(!s) return;
-  pzData.wu = (s.phases.wu||[]).map(a=>Object.assign({},a));
-  pzData.t1 = (s.phases.t1||[]).map(a=>Object.assign({},a));
-  pzData.t2 = (s.phases.t2||[]).map(a=>Object.assign({},a));
-  pzData.pm = (s.phases.pm||[]).map(a=>Object.assign({},a));
+  // Load this session's own phase structure into the planner (supports legacy sessions too)
+  plannerPhaseDefs = getSessionPhaseDefs(s).map(ph=>Object.assign({},ph));
+  pzData = {};
+  plannerPhaseDefs.forEach(ph=>{ pzData[ph.id] = (s.phases[ph.id]||[]).map(a=>Object.assign({},a)); });
   publishedSessions = publishedSessions.filter(x=>x.id!==id);
   sw('planner',null);
   document.getElementById('sess-title-inp').value = s.title;
   document.getElementById('sess-date-inp').value = s.date;
   document.getElementById('sess-time-inp').value = s.time||'';
-  document.getElementById('pt-wu').value = s.timings.wu||'15 mins';
-  document.getElementById('pt-t1').value = s.timings.t1||'25 mins';
-  document.getElementById('pt-t2').value = s.timings.t2||'25 mins';
-  document.getElementById('pt-pm').value = s.timings.pm||'15 mins';
   renderPlannerFromData();
   showToast('Session loaded — edit and republish!');
   saveAppData();
@@ -3681,7 +3756,7 @@ function renderPastSessions() {
         +'<button class="pbtn" data-past-action="permdelete" data-sess-id="'+s.id+'" style="font-size:10px;padding:4px 9px;height:auto;background:#fcebeb;color:#c0392b;border-color:#e8a49a;"><i class="ti ti-trash" style="font-size:10px;vertical-align:-1px;pointer-events:none;"></i></button>'
       +'</div>'
     +'</div>'
-    +'<div style="font-size:11px;color:#999;">'+['wu','t1','t2','pm'].filter(z=>s.phases[z]&&s.phases[z].length).map(z=>({wu:'Warm-up',t1:'Training 1',t2:'Training 2',pm:'Match'}[z])).join(' · ')+'</div>'
+    +'<div style="font-size:11px;color:#999;">'+getSessionPhaseDefs(s).filter(ph=>s.phases[ph.id]&&s.phases[ph.id].length).map(ph=>ph.name).join(' · ')+'</div>'
     +'</div>'
   ).join('');
   // event delegation
@@ -3894,13 +3969,11 @@ function renderNextSession() {
     return;
   }
 
-  // Count total activities across all phases
-  // phases stored as object {wu:[], t1:[], t2:[], pm:[]}
-  const phaseLabels = {wu:'Warm Up', t1:'Phase 1', t2:'Phase 2', pm:'Post Match'};
+  // Count total activities across all phases (dynamic — supports custom phase names)
   const phasesObj = session.phases || {};
-  const phaseKeys = ['wu','t1','t2','pm'];
-  const actCount = phaseKeys.reduce((acc, k) => acc + (Array.isArray(phasesObj[k]) ? phasesObj[k].length : 0), 0);
-  const phaseNames = phaseKeys.filter(k => Array.isArray(phasesObj[k]) && phasesObj[k].length > 0).map(k => phaseLabels[k]);
+  const phaseDefs = getSessionPhaseDefs(session);
+  const actCount = phaseDefs.reduce((acc, ph) => acc + (Array.isArray(phasesObj[ph.id]) ? phasesObj[ph.id].length : 0), 0);
+  const phaseNames = phaseDefs.filter(ph => Array.isArray(phasesObj[ph.id]) && phasesObj[ph.id].length > 0).map(ph => ph.name);
 
   // Show date as stored
   const daysLabel = session.date ? '📅 ' + session.date : '';
