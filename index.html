@@ -1447,14 +1447,20 @@ window.switchAuthTab = function(tab) {
 
 // Club code always visible — no show/hide needed
 
+// Flags this tab as intentionally changing accounts (vs. picking up a change
+// silently caused by a different tab/window signing into a different account).
+let localAuthActionPending = false;
+
 window.signIn = async function() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
   const err = document.getElementById('login-err');
   err.style.display='none';
+  localAuthActionPending = true;
   try {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch(e) {
+    localAuthActionPending = false;
     err.textContent = e.code==='auth/invalid-credential' ? 'Email or password incorrect.' : 'Sign in failed. Please try again.';
     err.style.display='block';
   }
@@ -1476,6 +1482,7 @@ window.registerUser = async function() {
   if (!teamConfig) { err.textContent='Club code not recognised — please check with your coach.'; err.style.display='block'; return; }
   if (role==='manager' && !teamConfig.allowsManager) { err.textContent='This code does not allow manager registration.'; err.style.display='block'; return; }
   if (!consentGiven) { err.textContent='Please confirm the photo/video consent checkbox to continue.'; err.style.display='block'; return; }
+  localAuthActionPending = true;
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await setDoc(doc(db,'users',cred.user.uid), {
@@ -1489,6 +1496,7 @@ window.registerUser = async function() {
       createdAt: new Date().toISOString()
     });
   } catch(e) {
+    localAuthActionPending = false;
     err.textContent = e.code==='auth/email-already-in-use' ? 'An account with this email already exists.' : 'Registration failed. Please try again.';
     err.style.display='block';
   }
@@ -1513,6 +1521,21 @@ const LEGACY_TEAM_CUTOFF = '2026-07-28T00:00:00.000Z';
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('loading').style.display = 'none';
   if (user) {
+    // Detect if this auth change was caused by a DIFFERENT tab/window signing
+    // into a different account — Firebase Auth sessions are shared across all
+    // tabs on the same browser, which is exactly what caused yesterday's U10/U11
+    // mix-up. If this tab already had a different account loaded and this new
+    // user wasn't the result of THIS tab's own sign-in/register action, block
+    // it here rather than silently loading the wrong team's data.
+    let tabUid = null;
+    try { tabUid = sessionStorage.getItem('graftTabUid'); } catch(e) {}
+    if (tabUid && tabUid !== user.uid && !localAuthActionPending) {
+      showTabConflictOverlay();
+      return;
+    }
+    try { sessionStorage.setItem('graftTabUid', user.uid); } catch(e) {}
+    localAuthActionPending = false;
+
     currentUser = user;
     const userData = await loadFromCloud('users/'+user.uid);
     console.log('User data loaded:', userData);
@@ -1549,11 +1572,31 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('app').style.display = 'block';
     initApp();
   } else {
+    try { sessionStorage.removeItem('graftTabUid'); } catch(e) {}
     currentUser = null;
     document.getElementById('auth-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
   }
 });
+
+// Shown when this tab detects that a different account signed in elsewhere on
+// this browser (another tab/window) while this tab still had its own account
+// active. Deliberately does NOT touch auth state or app data — just asks for
+// a manual reload, so nothing gets silently mixed between teams.
+function showTabConflictOverlay() {
+  if (document.getElementById('tab-conflict-overlay')) return;
+  const el = document.createElement('div');
+  el.id = 'tab-conflict-overlay';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(26,43,74,0.97);z-index:999999;display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:1.75rem;max-width:360px;text-align:center;font-family:'Nunito',sans-serif;">
+      <div style="font-size:32px;margin-bottom:.75rem;">🔄</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#1a2b4a;margin-bottom:.5rem;">Different account signed in</div>
+      <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:1.25rem;">A different account was signed into another tab or window on this device. To keep your teams' data separate, please refresh this tab to continue.</div>
+      <button onclick="location.reload()" style="width:100%;height:42px;border-radius:10px;background:#1a2b4a;color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'Nunito',sans-serif;">Refresh this tab</button>
+    </div>`;
+  document.body.appendChild(el);
+}
 
 async function initApp() {
   const rp = document.getElementById('role-pill'); if(rp) rp.textContent = currentRole==='manager' ? '🛠 Manager' : '👨‍👧 Parent';
@@ -4070,7 +4113,7 @@ function renderNextSession() {
     </div>
     <div class="ns-title">${session.title || 'Training Session'}</div>
     <div class="ns-meta">${session.date||''}${session.time?' · '+session.time:''}${actCount?' · '+actCount+' activities':''}</div>
-    ${phaseNames.length ? `<div class="ns-phases">${phaseNames.slice(0,4).map(p=>`<span class="ns-phase">${p}</span>`).join('')}</div>` : ''}
+    ${phaseNames.length ? `<div class="ns-phases">${phaseNames.map(p=>`<span class="ns-phase">${p}</span>`).join('')}</div>` : ''}
     <div style="margin-top:8px;font-size:11px;color:var(--navy);font-weight:700;">Tap to view full session →</div>
   </div>`;
 }
